@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.console.options.Details
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 import org.gradle.jvm.tasks.Jar
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 buildscript {
@@ -14,7 +13,6 @@ buildscript {
   dependencies {
     // TODO: load from properties or script plugin
     classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.0")
-    classpath("org.jetbrains.dokka:dokka-gradle-plugin:0.9.15")
   }
 }
 
@@ -44,7 +42,6 @@ repositories {
 apply {
   from("gradle/junit5.gradle.kts")
   plugin("org.junit.platform.gradle.plugin")
-  plugin("org.jetbrains.dokka")
 }
 
 val kotlinVersion by project
