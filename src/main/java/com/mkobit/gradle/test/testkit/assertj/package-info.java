@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.mkobit.gradle.testkit.assertj;
+package com.mkobit.gradle.test.testkit.assertj;
 
 import javax.annotation.ParametersAreNonnullByDefault;
