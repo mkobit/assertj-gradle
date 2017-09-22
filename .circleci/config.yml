@@ -8,7 +8,7 @@ jobs:
           # Disable Kotlin compiler daemon - https://discuss.kotlinlang.org/t/solved-disable-kotlin-compiler-process-keepalive/2622
           GRADLE_OPTS: -Dkotlin.compiler.execution.strategy="in-process"
 
-    working_directory: ~/gradle-kotlin-testing-extensions
+    working_directory: ~/assertj-gradle
     steps:
       - checkout
 
