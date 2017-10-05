@@ -7,9 +7,9 @@ import org.gradle.testkit.runner.BuildTask;
 import javax.annotation.Nullable;
 
 /**
- * Soft assertions for {@link GradleTestKitAssertions}.
+ * Soft assertions for {@link GradleAssertions}.
  */
-public final class GradleTestKitSoftAssertions extends SoftAssertions {
+public final class GradleSoftAssertions extends SoftAssertions {
 
   public BuildTaskAssert assertThat(final @Nullable BuildTask buildTask) {
     return proxy(BuildTaskAssert.class, BuildTask.class, buildTask);

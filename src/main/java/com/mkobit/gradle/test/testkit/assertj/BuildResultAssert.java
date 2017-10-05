@@ -13,6 +13,12 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Assertion methods for {@link BuildResult}.
+ *
+ * @see GradleAssertions
+ * @see BuildTaskAssert
+ */
 public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildResult> {
   public BuildResultAssert(final @Nullable BuildResult actual) {
     super(actual, BuildResultAssert.class);

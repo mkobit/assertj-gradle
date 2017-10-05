@@ -1,6 +1,6 @@
 package com.mkobit.gradle.test.testkit.assertj
 
-import com.mkobit.gradle.test.testkit.assertj.GradleTestKitAssertions.assertThat
+import com.mkobit.gradle.test.testkit.assertj.GradleAssertions.assertThat
 import com.nhaarman.mockito_kotlin.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -8,7 +8,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.junit.jupiter.api.Test
 
-internal class GradleTestKitAssertionsTest {
+internal class GradleAssertionsTest {
   @Test
   internal fun `can use static factory method for BuildTaskAssert`() {
     val mockBuildTask = mock<BuildTask>()

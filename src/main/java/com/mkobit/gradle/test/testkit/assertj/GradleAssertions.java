@@ -5,8 +5,15 @@ import org.gradle.testkit.runner.BuildTask;
 
 import javax.annotation.Nullable;
 
-public final class GradleTestKitAssertions {
-  private GradleTestKitAssertions() {
+/**
+ * Assertions for Gradle.
+ *
+ * Soft assertions are provided through {@link GradleSoftAssertions}.
+ * @see BuildResultAssert
+ * @see BuildTaskAssert
+ */
+public final class GradleAssertions {
+  private GradleAssertions() {
   }
 
   static BuildTaskAssert assertThat(final @Nullable BuildTask buildTask) {
