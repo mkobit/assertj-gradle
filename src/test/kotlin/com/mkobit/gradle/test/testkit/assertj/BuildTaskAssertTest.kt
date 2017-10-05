@@ -187,6 +187,17 @@ internal class BuildTaskAssertTest {
   }
 
   @Test
+  internal fun `path does not match`() {
+    val buildTask: BuildTask = mock {
+      on { path } doReturn TEST_PATH
+    }
+    val buildTaskAssert = BuildTaskAssert(buildTask)
+
+    assertThatCode { buildTaskAssert.pathDoesNotMatch(Pattern.compile("^nope.*")) }.doesNotThrowAnyException()
+    assertThatThrownBy { buildTaskAssert.pathDoesNotMatch(Pattern.compile("^:task.*$")) }.isInstanceOf(AssertionError::class.java)
+  }
+
+  @Test
   internal fun `path satisfies`() {
     val buildTask: BuildTask = mock {
       on { path } doReturn TEST_PATH

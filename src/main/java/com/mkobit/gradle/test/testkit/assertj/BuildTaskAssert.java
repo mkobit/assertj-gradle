@@ -114,6 +114,24 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   }
 
   /**
+   * Verifies that the {@link BuildTask#getPath()} does not match the provided pattern.
+   * @param pattern the pattern to test
+   * @return {@code this} assertion object
+   * @throws NullPointerException if the provided {@code pattern} is {@code null}
+   * @throws AssertionError if the {@code actual} is {@code null}
+   * @throws AssertionError if the {@code actual} path matches the provided {@code pattern}
+   */
+  public BuildTaskAssert pathDoesNotMatch(final Pattern pattern) {
+    isNotNull();
+    Objects.requireNonNull(pattern, "pattern");
+
+    if (pattern.matcher(actual.getPath()).matches()) {
+      failWithMessage("%nExpecting task path to match:%n <%s>%nbut was:%n <%s>", pattern, actual.getPath());
+    }
+    return this;
+  }
+
+  /**
    * Verifies that the {@link BuildTask#getPath()} satisfies the provided {@code }requirements}.
    * @param requirements the requirements for the path
    * @return {@code this} assertion object

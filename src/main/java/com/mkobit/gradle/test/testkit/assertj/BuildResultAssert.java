@@ -81,8 +81,14 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
    * @throws AssertionError if the {@code actual} output does not match with the provided {@code pattern}
    */
   public BuildResultAssert outputMatches(final Pattern pattern) {
-    // TODO
-    return null;
+    isNotNull();
+    Objects.requireNonNull(pattern, "pattern");
+
+    if (!pattern.matcher(actual.getOutput()).matches()) {
+      failWithMessage("%nExpecting build output to match:%n <%s>%nbut was:%n <%s>", pattern, actual.getOutput());
+    }
+
+    return this;
   }
 
   /**
@@ -95,8 +101,14 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
    * @throws AssertionError if the {@code actual} output matches the provided {@code pattern}
    */
   public BuildResultAssert outputDoesNotMatch(final Pattern pattern) {
-    // TODO
-    return null;
+    isNotNull();
+    Objects.requireNonNull(pattern, "pattern");
+
+    if (pattern.matcher(actual.getOutput()).matches()) {
+      failWithMessage("%nExpecting build output not to match:%n <%s>%nbut was:%n <%s>", pattern, actual.getOutput());
+    }
+
+    return this;
   }
 
   /**

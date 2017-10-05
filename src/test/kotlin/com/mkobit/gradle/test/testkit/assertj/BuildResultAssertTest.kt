@@ -2,7 +2,6 @@ package com.mkobit.gradle.test.testkit.assertj
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
@@ -13,10 +12,16 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.util.function.Consumer
+import java.util.regex.Pattern
 
+// There is a common theme/sets of cases that are common across the various assertions.
+// There is probably a way to abstract out the different cases
+// 1. throws NPE when null is any input parameter?
+// 2. does not throw exception with valid input?
+// 3. throws AssertionError with invalid input
+// 4. throws AssertionError when constructed with null object?
 internal class BuildResultAssertTest {
 
   private lateinit var mockBuildResult: BuildResult
@@ -46,19 +51,22 @@ internal class BuildResultAssertTest {
     assertThatCode { buildResultAssert.outputContains("build output") }.doesNotThrowAnyException()
   }
 
-  @Disabled("TODO")
   @Test
   internal fun `output matches`() {
-    // sets of cases that are common across the various
-    // 1. throws NPE when null is any input parameter?
-    // 2. does not throw exception with valid input?
-    // 3. throws AssertionError with invalid input
-    // 4. throws AssertionError when constructed with null object?
+    val buildOutput = "this is the build output"
+    whenever(mockBuildResult.output).thenReturn(buildOutput)
+
+    assertThatCode { buildResultAssert.outputMatches(Pattern.compile("^.*is the build.*\$")) }.doesNotThrowAnyException()
+    assertThatThrownBy { buildResultAssert.outputMatches(Pattern.compile("^no match here\$")) }.isInstanceOf(AssertionError::class.java)
   }
 
-  @Disabled("TODO")
   @Test
   internal fun `output does not match`() {
+    val buildOutput = "this is the build output"
+    whenever(mockBuildResult.output).thenReturn(buildOutput)
+
+    assertThatCode { buildResultAssert.outputDoesNotMatch(Pattern.compile("^no match here\$")) }.doesNotThrowAnyException()
+    assertThatThrownBy { buildResultAssert.outputDoesNotMatch(Pattern.compile("^.*is the build.*\$")) }.isInstanceOf(AssertionError::class.java)
   }
 
   @Test
