@@ -77,19 +77,18 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   }
 
   /**
-   * Verifies that the {@link BuildTask#getPath()} starts with the provided prefix.
-   * @param value the value to test
+   * Verifies that the {@link BuildTask#getPath()} contains the provided sequence.
+   * @param sequence the sequence to test
    * @return {@code this} assertion object
-   * @throws NullPointerException if the provided {@code value} is {@code null}
-   * @throws NullPointerException if the {@code actual} is {@code null}
+   * @throws NullPointerException if the provided {@code sequence} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
-   * @throws AssertionError if the {@code actual} does not contain with the provided {@code value}
+   * @throws AssertionError if the {@code actual} path does not contain with the provided {@code sequence}
    */
-  public BuildTaskAssert pathContains(final CharSequence value) {
+  public BuildTaskAssert pathContains(final CharSequence sequence) {
     isNotNull();
-    Objects.requireNonNull(value, "value");
+    Objects.requireNonNull(sequence, "sequence");
 
-    final String pathValue = value.toString();
+    final String pathValue = sequence.toString();
     if (!actual.getPath().contains(pathValue)) {
       failWithMessage("%nExpecting task path to contain:%n <%s>%nbut was:%n <%s>", pathValue, actual.getPath());
     }
@@ -101,9 +100,8 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
    * @param pattern the pattern to test
    * @return {@code this} assertion object
    * @throws NullPointerException if the provided {@code pattern} is {@code null}
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
-   * @throws AssertionError if the {@code actual} does not match with the provided {@code pattern}
+   * @throws AssertionError if the {@code actual} path does not match the provided {@code pattern}
    */
   public BuildTaskAssert pathMatches(final Pattern pattern) {
     isNotNull();
@@ -116,11 +114,10 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   }
 
   /**
-   * Verifies that the {@link BuildTask#getPath()} satisfies the provided requirements.
+   * Verifies that the {@link BuildTask#getPath()} satisfies the provided {@code }requirements}.
    * @param requirements the requirements for the path
    * @return {@code this} assertion object
    * @throws NullPointerException if the provided {@code requirements} is {@code null}
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
    * @see AbstractAssert#satisfies(Consumer)
    */
@@ -133,8 +130,6 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   /**
    * Verifies that the outcome is {@link TaskOutcome#FAILED}.
    * @return {@code this} assertion object
-   * @throws NullPointerException if the {@code actual} is {@code null}
-   * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} does not have outcome {@link TaskOutcome#FAILED}
    */
   public BuildTaskAssert isFailed() {
@@ -146,7 +141,6 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   /**
    * Verifies that the outcome is {@link TaskOutcome#FROM_CACHE}.
    * @return {@code this} assertion object
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} does not have outcome {@link TaskOutcome#FROM_CACHE}
    */
@@ -159,7 +153,6 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   /**
    * Verifies that the outcome is {@link TaskOutcome#NO_SOURCE}.
    * @return {@code this} assertion object
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} does not have outcome {@link TaskOutcome#NO_SOURCE}
    */
@@ -172,7 +165,6 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   /**
    * Verifies that the outcome is {@link TaskOutcome#SKIPPED}.
    * @return {@code this} assertion object
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} does not have outcome {@link TaskOutcome#SKIPPED}
    */
@@ -185,7 +177,6 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   /**
    * Verifies that the outcome is {@link TaskOutcome#SUCCESS}.
    * @return {@code this} assertion object
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} does not have outcome {@link TaskOutcome#SUCCESS}
    */
@@ -198,7 +189,6 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   /**
    * Verifies that the outcome is {@link TaskOutcome#UP_TO_DATE}.
    * @return {@code this} assertion object
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} does not have outcome {@link TaskOutcome#UP_TO_DATE}
    */
@@ -213,7 +203,6 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
    * @param taskOutcome the outcome to check the {@code actual} against
    * @return {@code this} assertion object
    * @throws NullPointerException if the provided {@code taskOutcome} is {@code null}
-   * @throws NullPointerException if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} does not the provided outcome
    * @see BuildTask#getOutcome()
@@ -225,6 +214,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   }
 
   private void assertTaskOutcome(final TaskOutcome expected) {
+    Objects.requireNonNull(expected, "expected");
     if (actual.getOutcome() != expected) {
       //failWithMessage("%nExpecting build output:%n <%s>%nto contain:%n <%s>", text, actual.getOutput());
       failWithMessage(

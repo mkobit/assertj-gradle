@@ -2,8 +2,10 @@ package com.mkobit.gradle.test.testkit.assertj
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -11,6 +13,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.util.function.Consumer
 
@@ -41,6 +44,21 @@ internal class BuildResultAssertTest {
 
     assertThatThrownBy { buildResultAssert.outputContains("nope present") }.isInstanceOf(AssertionError::class.java)
     assertThatCode { buildResultAssert.outputContains("build output") }.doesNotThrowAnyException()
+  }
+
+  @Disabled("TODO")
+  @Test
+  internal fun `output matches`() {
+    // sets of cases that are common across the various
+    // 1. throws NPE when null is any input parameter?
+    // 2. does not throw exception with valid input?
+    // 3. throws AssertionError with invalid input
+    // 4. throws AssertionError when constructed with null object?
+  }
+
+  @Disabled("TODO")
+  @Test
+  internal fun `output does not match`() {
   }
 
   @Test
@@ -246,9 +264,9 @@ internal class BuildResultAssertTest {
     verify(mockBuildResult, times(1)).task(path)
     verify(mockBuildTaskConsumer, times(1)).accept(mockBuildTask)
 
-    assertThatCode {
+    assertThatThrownBy {
       buildResultAssert.hasTaskAtPathSatisfying(":noTask", mockBuildTaskConsumer)
-    }.doesNotThrowAnyException()
-    verify(mockBuildTaskConsumer, times(1)).accept(null)
+    }.isInstanceOf(AssertionError::class.java)
+    verifyNoMoreInteractions(mockBuildTaskConsumer)
   }
 }

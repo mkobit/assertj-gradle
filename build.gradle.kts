@@ -44,15 +44,6 @@ val gitCommitSha: String by lazy {
   }
 }
 
-tasks.withType(Jar::class.java) {
-  manifest {
-    attributes(mapOf(
-      "Build-Revision" to gitCommitSha,
-      "Implementation-Version" to project.version
-      // TODO: include Gradle version?
-    ))
-  }
-}
 
 val SourceSet.kotlin: SourceDirectorySet
   get() = withConvention(KotlinSourceSet::class) { kotlin }
@@ -134,9 +125,23 @@ val javadocJar by tasks.creating(Jar::class) {
 
 tasks {
   withType(Jar::class.java) {
+    manifest {
+      attributes(mapOf(
+        "Build-Revision" to gitCommitSha,
+        "Implementation-Version" to project.version
+        // TODO: include Gradle version?
+      ))
+    }
     from(project.projectDir) {
       include("LICENSE.txt")
       into("META-INF")
+    }
+  }
+
+  withType(Javadoc::class.java) {
+    options {
+      header = project.name
+      encoding = "UTF-8"
     }
   }
 
