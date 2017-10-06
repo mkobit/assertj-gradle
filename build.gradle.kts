@@ -19,6 +19,7 @@ buildscript {
 }
 
 plugins {
+  id("com.gradle.build-scan") version "1.9"
   `java-library`
   `maven-publish`
   kotlin("jvm")
@@ -46,6 +47,27 @@ val gitCommitSha: String by lazy {
 
 val SourceSet.kotlin: SourceDirectorySet
   get() = withConvention(KotlinSourceSet::class) { kotlin }
+
+buildScan {
+  fun env(key: String): String? = System.getenv(key)
+
+  setLicenseAgree("yes")
+  setLicenseAgreementUrl("https://gradle.com/terms-of-service")
+
+  // Env variables from https://circleci.com/docs/2.0/env-vars/
+  if (env("CI") != null) {
+    logger.lifecycle("Running in CI environment, setting build scan attributes.")
+    tag("CI")
+    env("CIRCLE_BRANCH")?.let { tag(it) }
+    env("CIRCLE_BUILD_NUM")?.let { value("Circle CI Build Number", it) }
+    env("CIRCLE_BUILD_URL")?.let { link("Build URL", it) }
+    env("CIRCLE_SHA1")?.let { value("Revision", it) }
+    env("CIRCLE_COMPARE_URL")?.let { link("Diff", it) }
+    env("CIRCLE_REPOSITORY_URL")?.let { value("Repository", it) }
+    env("CIRCLE_PR_NUMBER")?.let { value("Pull Request Number", it) }
+    link("Repository", "https://github.com/mkobit/jenkins-pipeline-shared-libraries-gradle-plugin")
+  }
+}
 
 tasks {
   "wrapper"(Wrapper::class) {
