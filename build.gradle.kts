@@ -249,7 +249,7 @@ bintray {
     name = project.name
     userOrg = "mkobit"
 
-    setLabels("gradle", "testkit", "kotlin")
+    setLabels("gradle", "assertj", "assertion", "testkit")
     setLicenses("MIT")
     desc = project.description
     websiteUrl = projectUrl
