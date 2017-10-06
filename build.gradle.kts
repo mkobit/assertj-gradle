@@ -30,9 +30,9 @@ version = "0.1.0"
 group = "com.mkobit.gradle.test"
 description = "AssertJ extensions for Gradle"
 
-val projectUrl by extra { "https://github.com/mkobit/gradle-test-kotlin-extensions" }
-val issuesUrl by extra { "https://github.com/mkobit/gradle-test-kotlin-extensions/issues" }
-val scmUrl by extra { "https://github.com/mkobit/gradle-test-kotlin-extensions.git" }
+val projectUrl by extra { "https://github.com/mkobit/assertj-gradle" }
+val issuesUrl by extra { "https://github.com/mkobit/assertj-gradle/issues" }
+val scmUrl by extra { "https://github.com/mkobit/assertj-gradle.git" }
 
 val gitCommitSha: String by lazy {
   ByteArrayOutputStream().use {
@@ -43,7 +43,6 @@ val gitCommitSha: String by lazy {
     it.toString(Charsets.UTF_8.name()).trim()
   }
 }
-
 
 val SourceSet.kotlin: SourceDirectorySet
   get() = withConvention(KotlinSourceSet::class) { kotlin }
