@@ -34,11 +34,11 @@ jobs:
           key: home-cache-{{ checksum "build.gradle.kts" }}-{{ checksum "gradle.properties" }}-{{ checksum "gradle/junit5.gradle.kts" }}
 
       - store_test_results:
-          path: ~/gradle-test-kit-extensions/build/test-results/
+          path: ~/assertj-gradle/build/test-results/
 
       - save_cache:
           paths:
-            - ~/gradle-test-kit-extensions/.gradle
+            - ~/assertj-gradle/.gradle
           key: build-cache-{{ checksum "build.gradle.kts" }}-{{ checksum "gradle.properties" }}-{{ checksum "gradle/junit5.gradle.kts" }}
 
 
