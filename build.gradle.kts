@@ -19,7 +19,7 @@ buildscript {
 }
 
 plugins {
-  id("com.gradle.build-scan") version "1.9"
+  id("com.gradle.build-scan") version "1.9.1"
   `java-library`
   `maven-publish`
   kotlin("jvm")
