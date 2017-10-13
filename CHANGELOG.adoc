@@ -22,7 +22,11 @@ For each release, a subsection should be added for each of the following if they
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
-== Unreleased (yyyy/mm/dd)
+== 0.2.0 (2017/10/13)
+
+=== Fixed
+
+* Method visibility on `GradleAssertions` are `public` instead of package private
 
 === Changed
 
