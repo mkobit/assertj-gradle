@@ -23,7 +23,7 @@ public final class GradleAssertions {
    * @param buildTask the task to assert on
    * @return a new {@link BuildTaskAssert} instance
    */
-  static BuildTaskAssert assertThat(final @Nullable BuildTask buildTask) {
+  public static BuildTaskAssert assertThat(final @Nullable BuildTask buildTask) {
     return new BuildTaskAssert(buildTask);
   }
 
@@ -32,7 +32,7 @@ public final class GradleAssertions {
    * @param buildResult the result to assert on
    * @return a new {@link BuildResultAssert} instance
    */
-  static BuildResultAssert assertThat(final @Nullable BuildResult buildResult) {
+  public static BuildResultAssert assertThat(final @Nullable BuildResult buildResult) {
     return new BuildResultAssert(buildResult);
   }
 }
