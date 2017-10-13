@@ -30,12 +30,12 @@ dependencies {
 
 === Assertions
 
-The main entrypoints for the assertions are `com.mkobit.gradle.test.testkit.assertj.GradleAssertions` and `com.mkobit.gradle.test.testkit.assertj.GradleSoftAssertions`.
+The main entrypoints for the assertions are `com.mkobit.gradle.test.assertj.GradleAssertions` and `com.mkobit.gradle.test.assertj.GradleSoftAssertions`.
 
 .Asserting on a link:{uri-gradle-BuildResult}[`BuildResult`]
 [source, java]
 ----
-import static com.mkobit.gradle.test.testkit.assertj.GradleAssertions.assertThat;
+import static com.mkobit.gradle.test.assertj.GradleAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.gradle.testkit.runner.BuildResult;
@@ -63,7 +63,7 @@ class BuildResultAssertAssertionsExample {
 .Asserting on a link:{uri-gradle-BuildTask}[`BuildTask`]
 [source, java]
 ----
-import static com.mkobit.gradle.test.testkit.assertj.GradleAssertions.assertThat;
+import static com.mkobit.gradle.test.assertj.GradleAssertions.assertThat;
 
 import org.gradle.testkit.runner.TaskOutcome;
 import org.gradle.testkit.runner.BuildTask;

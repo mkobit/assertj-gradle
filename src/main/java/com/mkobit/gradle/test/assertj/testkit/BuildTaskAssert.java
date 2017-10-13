@@ -1,4 +1,4 @@
-package com.mkobit.gradle.test.testkit.assertj;
+package com.mkobit.gradle.test.assertj.testkit;
 
 import org.assertj.core.api.AbstractAssert;
 import org.gradle.testkit.runner.BuildTask;
@@ -13,7 +13,8 @@ import javax.annotation.Nullable;
 /**
  * Assertion methods for {@link BuildTask}.
  *
- * @see GradleAssertions
+ * @see com.mkobit.gradle.test.assertj.GradleAssertions
+ * @see com.mkobit.gradle.test.assertj.GradleSoftAssertions
  */
 public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> {
   public BuildTaskAssert(@Nullable final BuildTask actual) {

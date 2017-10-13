@@ -1,5 +1,7 @@
-package com.mkobit.gradle.test.testkit.assertj;
+package com.mkobit.gradle.test.assertj;
 
+import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert;
+import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.BuildTask;
 

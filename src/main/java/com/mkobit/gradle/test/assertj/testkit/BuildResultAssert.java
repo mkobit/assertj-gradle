@@ -1,4 +1,4 @@
-package com.mkobit.gradle.test.testkit.assertj;
+package com.mkobit.gradle.test.assertj.testkit;
 
 import org.assertj.core.api.AbstractAssert;
 import org.gradle.testkit.runner.BuildResult;
@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 /**
  * Assertion methods for {@link BuildResult}.
  *
- * @see GradleAssertions
- * @see GradleSoftAssertions
+ * @see com.mkobit.gradle.test.assertj.GradleAssertions
+ * @see com.mkobit.gradle.test.assertj.GradleSoftAssertions
  * @see BuildTaskAssert
  */
 public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildResult> {

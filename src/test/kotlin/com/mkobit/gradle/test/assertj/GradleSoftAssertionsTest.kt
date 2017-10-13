@@ -1,4 +1,4 @@
-package com.mkobit.gradle.test.testkit.assertj
+package com.mkobit.gradle.test.assertj
 
 import com.nhaarman.mockito_kotlin.mock
 import org.assertj.core.api.Assertions
