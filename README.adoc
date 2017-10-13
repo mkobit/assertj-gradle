@@ -1,7 +1,8 @@
 = AssertJ Gradle
 :toc:
-:uri-gradle-BuildResult:
-:uri-gradle-BuildTask:
+:uri-github-releases: https://github.com/mkobit/assertj-gradlejenkins-pipeline-shared-libraries-gradle-plugin/releases
+:uri-gradle-BuildResult: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildResult.html
+:uri-gradle-BuildTask: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildTask.html
 :uri-assertj: https://joel-costigliola.github.io/assertj/
 :uri-build-status-image: https://circleci.com/gh/mkobit/assertj-gradle/tree/master.svg?style=svg
 :circle-ci-status-badge: image:{uri-build-status-image}["CircleCI", link="https://circleci.com/gh/mkobit/assertj-gradle/tree/master"]
@@ -13,6 +14,9 @@
 {circle-ci-status-badge}
 
 link:{uri-assertj}[AssertJ] assertions for Gradle testing.
+
+NOTE: This documentation is for the `HEAD` of the repository.
+      To see documentation at a specific version see the link:{uri-github-releases}[GitHub Releases page]
 
 == Usage
 
