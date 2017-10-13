@@ -27,6 +27,11 @@ plugins {
   id("com.jfrog.bintray") version "1.7.3"
 }
 
+apply {
+  from("gradle/junit5.gradle.kts")
+  plugin("org.junit.platform.gradle.plugin")
+}
+
 version = "0.1.0"
 group = "com.mkobit.gradle.test"
 description = "AssertJ extensions for Gradle"
@@ -69,21 +74,14 @@ buildScan {
   }
 }
 
-tasks {
-  "wrapper"(Wrapper::class) {
-    gradleVersion = "4.2.1"
-    distributionType = Wrapper.DistributionType.ALL
-  }
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 repositories {
   jcenter()
   mavenCentral()
-}
-
-apply {
-  from("gradle/junit5.gradle.kts")
-  plugin("org.junit.platform.gradle.plugin")
 }
 
 val kotlinVersion by project
@@ -119,33 +117,12 @@ extensions.getByType(JUnitPlatformExtension::class.java).apply {
   details = Details.TREE
 }
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 val main = java.sourceSets["main"]!!
 // No Kotlin in main source set
 main.kotlin.setSrcDirs(emptyList<Any>())
 
-val sourcesJar by tasks.creating(Jar::class) {
-  classifier = "sources"
-  from(main.allSource)
-  description = "Assembles a JAR of the source code"
-  group = JavaBasePlugin.DOCUMENTATION_GROUP
-}
-
-val javadocJar by tasks.creating(Jar::class) {
-  val javadoc by tasks.getting(Javadoc::class)
-  dependsOn(javadoc)
-  from(javadoc.destinationDir)
-  classifier = "javadoc"
-  description = "Assembles a JAR of the generated Javadoc"
-  group = JavaBasePlugin.DOCUMENTATION_GROUP
-}
-
 tasks {
-  withType(Jar::class.java) {
+  withType<Jar> {
     manifest {
       attributes(mapOf(
         "Build-Revision" to gitCommitSha,
@@ -159,15 +136,36 @@ tasks {
     }
   }
 
-  withType(Javadoc::class.java) {
+  "wrapper"(Wrapper::class) {
+    gradleVersion = "4.2.1"
+    distributionType = Wrapper.DistributionType.ALL
+  }
+
+  withType<Javadoc> {
     options {
       header = project.name
       encoding = "UTF-8"
     }
   }
 
-  withType(KotlinCompile::class.java) {
+  withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+  }
+
+  val sourcesJar by tasks.creating(Jar::class) {
+    classifier = "sources"
+    from(main.allSource)
+    description = "Assembles a JAR of the source code"
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+  }
+
+  val javadocJar by tasks.creating(Jar::class) {
+    val javadoc by tasks.getting(Javadoc::class)
+    dependsOn(javadoc)
+    from(javadoc.destinationDir)
+    classifier = "javadoc"
+    description = "Assembles a JAR of the generated Javadoc"
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
   }
 
   "assemble" {
@@ -189,33 +187,64 @@ tasks {
     }
   }
 
+  val docVersionChecks by creating {
+    group = PublishingPlugin.PUBLISH_TASK_GROUP
+    description = "Checks if the repository documentation is up-to-date for the version $version"
+    val readme = file("README.adoc")
+    val changeLog = file("CHANGELOG.adoc")
+    inputs.file(readme)
+    inputs.file(changeLog)
+    // Output is just used for up-to-date checking
+    outputs.dir(file("$buildDir/repositoryDocumentation"))
+    doFirst {
+      readme.bufferedReader().use { it.readText() }.let { text ->
+        val versionAttribute = ":latest-version: $version"
+        val containsVersionAttribute = text.contains(versionAttribute)
+        if (!containsVersionAttribute) {
+          throw GradleException("$readme does not contain up-to-date :latest-version: attribute. Should contain '$versionAttribute'")
+        }
+      }
+      changeLog.bufferedReader().use { it.readLines() }.let { lines ->
+        val changelogLineRegex = Regex("^== ${version.toString().replace(".", "\\.")} \\(\\d{4}\\/\\d{2}\\/\\d{2}\\)\$")
+        val changelogSectionMatch = lines.any { line -> changelogLineRegex.matches(line) }
+        if (!changelogSectionMatch) {
+          throw GradleException("$changeLog does not contain section for $version")
+        }
+      }
+    }
+  }
+
   val gitTag by creating(Exec::class) {
     description = "Tags the local repository with version ${project.version}"
     group = PublishingPlugin.PUBLISH_TASK_GROUP
     commandLine("git", "tag", "-a", project.version, "-m", "Gradle created tag for ${project.version}")
+    mustRunAfter(docVersionChecks)
+  }
+
+  val bintrayUpload by getting {
+    dependsOn(gitDirtyCheck)
+    mustRunAfter(gitTag, docVersionChecks)
   }
 
   val pushGitTag by creating(Exec::class) {
     description = "Pushes Git tag ${project.version} to origin"
     group = PublishingPlugin.PUBLISH_TASK_GROUP
-    dependsOn(gitTag)
+    mustRunAfter(bintrayUpload, gitTag, docVersionChecks)
     commandLine("git", "push", "origin", "refs/tags/${project.version}")
-  }
-
-  val bintrayUpload by getting {
-    dependsOn(gitDirtyCheck, gitTag)
   }
 
   "release" {
     group = PublishingPlugin.PUBLISH_TASK_GROUP
     description = "Publishes the library and pushes up a Git tag for the current commit"
-    dependsOn(bintrayUpload, pushGitTag)
+    dependsOn(docVersionChecks, bintrayUpload, pushGitTag, gitTag, gitDirtyCheck, "build")
   }
 }
 
 val publicationName = "assertjGradle"
 publishing {
   publications.invoke {
+    val sourcesJar by tasks.getting
+    val javadocJar by tasks.getting
     publicationName(MavenPublication::class) {
       from(components["java"])
       artifact(sourcesJar)
