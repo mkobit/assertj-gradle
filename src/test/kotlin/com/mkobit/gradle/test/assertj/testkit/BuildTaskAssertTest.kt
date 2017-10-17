@@ -4,10 +4,12 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.TaskOutcome
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.function.Consumer
 import java.util.regex.Pattern
@@ -15,6 +17,18 @@ import java.util.regex.Pattern
 internal class BuildTaskAssertTest {
   companion object {
     private val TEST_PATH = ":taskName"
+  }
+
+  private lateinit var buildTaskAssert: BuildTaskAssert
+
+  private lateinit var mockBuildTask: BuildTask
+
+  @BeforeEach
+  internal fun setUp() {
+    mockBuildTask = mock {
+      on { path } doReturn TEST_PATH
+    }
+    buildTaskAssert = BuildTaskAssert(mockBuildTask)
   }
 
   @Test
@@ -26,11 +40,7 @@ internal class BuildTaskAssertTest {
 
   @Test
   internal fun `FAILED task outcome`() {
-    val buildTask: BuildTask = mock {
-      on { outcome } doReturn TaskOutcome.FAILED
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
+    whenever(mockBuildTask.outcome).thenReturn(TaskOutcome.FAILED)
 
     assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.FAILED) }.doesNotThrowAnyException()
 
@@ -44,11 +54,7 @@ internal class BuildTaskAssertTest {
 
   @Test
   internal fun `FROM_CACHE task outcome`() {
-    val buildTask: BuildTask = mock {
-      on { outcome } doReturn TaskOutcome.FROM_CACHE
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
+    whenever(mockBuildTask.outcome).thenReturn(TaskOutcome.FROM_CACHE)
 
     assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.FROM_CACHE) }.doesNotThrowAnyException()
 
@@ -62,11 +68,7 @@ internal class BuildTaskAssertTest {
 
   @Test
   internal fun `NO_SOURCE task outcome`() {
-    val buildTask: BuildTask = mock {
-      on { outcome } doReturn TaskOutcome.NO_SOURCE
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
+    whenever(mockBuildTask.outcome).thenReturn(TaskOutcome.NO_SOURCE)
 
     assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.NO_SOURCE) }.doesNotThrowAnyException()
 
@@ -80,11 +82,7 @@ internal class BuildTaskAssertTest {
 
   @Test
   internal fun `SKIPPED task outcome`() {
-    val buildTask: BuildTask = mock {
-      on { outcome } doReturn TaskOutcome.SKIPPED
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
+    whenever(mockBuildTask.outcome).thenReturn(TaskOutcome.SKIPPED)
 
     assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.SKIPPED) }.doesNotThrowAnyException()
 
@@ -97,11 +95,7 @@ internal class BuildTaskAssertTest {
 
   @Test
   internal fun `SUCCESS task outcome`() {
-    val buildTask: BuildTask = mock {
-      on { outcome } doReturn TaskOutcome.SUCCESS
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
+    whenever(mockBuildTask.outcome).thenReturn(TaskOutcome.SUCCESS)
 
     assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.SUCCESS) }.doesNotThrowAnyException()
 
@@ -115,11 +109,7 @@ internal class BuildTaskAssertTest {
 
   @Test
   internal fun `UP_TO_DATE task outcome`() {
-    val buildTask: BuildTask = mock {
-      on { outcome } doReturn TaskOutcome.UP_TO_DATE
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
+    whenever(mockBuildTask.outcome).thenReturn(TaskOutcome.UP_TO_DATE)
 
     assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.UP_TO_DATE) }.doesNotThrowAnyException()
 
@@ -133,78 +123,43 @@ internal class BuildTaskAssertTest {
 
   @Test
   internal fun `path equals`() {
-    val buildTask: BuildTask = mock {
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
-
     assertThatCode { buildTaskAssert.pathIsEqualTo(TEST_PATH) }.doesNotThrowAnyException()
     assertThatThrownBy { buildTaskAssert.pathIsEqualTo(":notThisPath") }.isInstanceOf(AssertionError::class.java)
   }
 
   @Test
   internal fun `path begins with`() {
-    val buildTask: BuildTask = mock {
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
-
     assertThatCode { buildTaskAssert.pathStartsWith(":task") }.doesNotThrowAnyException()
     assertThatThrownBy { buildTaskAssert.pathStartsWith(":nope") }.isInstanceOf(AssertionError::class.java)
   }
 
   @Test
   internal fun `path ends with`() {
-    val buildTask: BuildTask = mock {
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
-
     assertThatCode { buildTaskAssert.pathEndsWith("Name") }.doesNotThrowAnyException()
     assertThatThrownBy { buildTaskAssert.pathEndsWith("Nope") }.isInstanceOf(AssertionError::class.java)
   }
 
   @Test
   internal fun `path contains`() {
-    val buildTask: BuildTask = mock {
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
-
     assertThatCode { buildTaskAssert.pathContains("skNa") }.doesNotThrowAnyException()
     assertThatThrownBy { buildTaskAssert.pathContains("nope") }.isInstanceOf(AssertionError::class.java)
   }
 
   @Test
   internal fun `path matches`() {
-    val buildTask: BuildTask = mock {
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
-
     assertThatCode { buildTaskAssert.pathMatches(Pattern.compile("^:task.*$")) }.doesNotThrowAnyException()
     assertThatThrownBy { buildTaskAssert.pathMatches(Pattern.compile("^nope.*")) }.isInstanceOf(AssertionError::class.java)
   }
 
   @Test
   internal fun `path does not match`() {
-    val buildTask: BuildTask = mock {
-      on { path } doReturn TEST_PATH
-    }
-    val buildTaskAssert = BuildTaskAssert(buildTask)
-
     assertThatCode { buildTaskAssert.pathDoesNotMatch(Pattern.compile("^nope.*")) }.doesNotThrowAnyException()
     assertThatThrownBy { buildTaskAssert.pathDoesNotMatch(Pattern.compile("^:task.*$")) }.isInstanceOf(AssertionError::class.java)
   }
 
   @Test
   internal fun `path satisfies`() {
-    val buildTask: BuildTask = mock {
-      on { path } doReturn TEST_PATH
-    }
     val mockConsumer: Consumer<String?> = mock()
-
-    val buildTaskAssert = BuildTaskAssert(buildTask)
     assertThatCode { buildTaskAssert.pathSatisfies(mockConsumer) }.doesNotThrowAnyException()
     verify(mockConsumer, times(1)).accept(TEST_PATH)
   }
