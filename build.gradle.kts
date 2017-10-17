@@ -19,7 +19,7 @@ buildscript {
 }
 
 plugins {
-  id("com.gradle.build-scan") version "1.9.1"
+  id("com.gradle.build-scan") version "1.10"
   `java-library`
   `maven-publish`
   kotlin("jvm")
@@ -96,7 +96,7 @@ dependencies {
   api("org.assertj", "assertj-core", "3.8.0")
   testImplementation(kotlin("stdlib-jre8", kotlinVersion as String))
   testImplementation(kotlin("reflect", kotlinVersion as String))
-  testImplementation("org.mockito:mockito-core:2.10.0")
+  testImplementation("org.mockito:mockito-core:2.11.0")
   testImplementation("com.nhaarman:mockito-kotlin:1.5.0")
   junitTestImplementationArtifacts.values.forEach {
     testImplementation(it)
