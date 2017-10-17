@@ -36,7 +36,7 @@ internal class BuildResultAssertTest {
   }
 
   @Test
-  internal fun `constructed with null instance`() {
+  internal fun `constructed with null BuildResult instance`() {
     val nullActualBuildResultAssert = BuildResultAssert(null)
     assertThatThrownBy { nullActualBuildResultAssert.isNotNull }.isInstanceOf(AssertionError::class.java)
     assertThatCode { nullActualBuildResultAssert.isNull() }.doesNotThrowAnyException()

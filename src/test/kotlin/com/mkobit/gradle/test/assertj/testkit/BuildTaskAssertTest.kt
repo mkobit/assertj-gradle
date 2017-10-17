@@ -32,7 +32,7 @@ internal class BuildTaskAssertTest {
     }
     val buildTaskAssert = BuildTaskAssert(buildTask)
 
-    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.FAILED) }
+    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.FAILED) }.doesNotThrowAnyException()
 
     assertThatCode { buildTaskAssert.isFailed }.doesNotThrowAnyException()
     assertThatThrownBy { buildTaskAssert.isFromCache }.isInstanceOf(AssertionError::class.java)
@@ -50,7 +50,7 @@ internal class BuildTaskAssertTest {
     }
     val buildTaskAssert = BuildTaskAssert(buildTask)
 
-    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.FROM_CACHE) }
+    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.FROM_CACHE) }.doesNotThrowAnyException()
 
     assertThatThrownBy { buildTaskAssert.isFailed }.isInstanceOf(AssertionError::class.java)
     assertThatCode { buildTaskAssert.isFromCache }.doesNotThrowAnyException()
@@ -68,7 +68,7 @@ internal class BuildTaskAssertTest {
     }
     val buildTaskAssert = BuildTaskAssert(buildTask)
 
-    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.NO_SOURCE) }
+    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.NO_SOURCE) }.doesNotThrowAnyException()
 
     assertThatThrownBy { buildTaskAssert.isFailed }.isInstanceOf(AssertionError::class.java)
     assertThatThrownBy { buildTaskAssert.isFromCache }.isInstanceOf(AssertionError::class.java)
@@ -86,7 +86,7 @@ internal class BuildTaskAssertTest {
     }
     val buildTaskAssert = BuildTaskAssert(buildTask)
 
-    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.SKIPPED) }
+    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.SKIPPED) }.doesNotThrowAnyException()
 
     assertThatThrownBy { buildTaskAssert.isFromCache }.isInstanceOf(AssertionError::class.java)
     assertThatThrownBy { buildTaskAssert.isNoSource }.isInstanceOf(AssertionError::class.java)
@@ -103,7 +103,7 @@ internal class BuildTaskAssertTest {
     }
     val buildTaskAssert = BuildTaskAssert(buildTask)
 
-    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.SUCCESS) }
+    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.SUCCESS) }.doesNotThrowAnyException()
 
     assertThatThrownBy { buildTaskAssert.isFailed }.isInstanceOf(AssertionError::class.java)
     assertThatThrownBy { buildTaskAssert.isFromCache }.isInstanceOf(AssertionError::class.java)
@@ -121,7 +121,7 @@ internal class BuildTaskAssertTest {
     }
     val buildTaskAssert = BuildTaskAssert(buildTask)
 
-    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.UP_TO_DATE) }
+    assertThatCode { buildTaskAssert.hasTaskOutcome(TaskOutcome.UP_TO_DATE) }.doesNotThrowAnyException()
 
     assertThatThrownBy { buildTaskAssert.isFailed }.isInstanceOf(AssertionError::class.java)
     assertThatThrownBy { buildTaskAssert.isFromCache }.isInstanceOf(AssertionError::class.java)
