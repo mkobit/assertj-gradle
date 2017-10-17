@@ -1,7 +1,8 @@
 /**
  * AssertJ extensions for Gradle.
  */
-@ParametersAreNonnullByDefault
+@DefaultQualifier(value = NonNull.class)
 package com.mkobit.gradle.test.assertj;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;

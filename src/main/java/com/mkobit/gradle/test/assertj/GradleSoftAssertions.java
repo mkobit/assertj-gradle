@@ -3,10 +3,9 @@ package com.mkobit.gradle.test.assertj;
 import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert;
 import org.assertj.core.api.SoftAssertions;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.BuildTask;
-
-import javax.annotation.Nullable;
 
 /**
  * Soft assertions for {@link GradleAssertions}.

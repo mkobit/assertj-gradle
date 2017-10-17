@@ -1,14 +1,13 @@
 package com.mkobit.gradle.test.assertj.testkit;
 
 import org.assertj.core.api.AbstractAssert;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.testkit.runner.BuildTask;
 import org.gradle.testkit.runner.TaskOutcome;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
 
 /**
  * Assertion methods for {@link BuildTask}.
@@ -29,9 +28,12 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
    * @throws AssertionError if the {@code actual} is {@code null}
    * @throws AssertionError if the {@code actual} is not equal to the provided {@code path}
    */
-  public BuildTaskAssert pathIsEqualTo(final String path) {
+  public BuildTaskAssert pathIsEqualTo(final CharSequence path) {
     isNotNull();
-    if (!path.equals(actual.getPath())) {
+    Objects.requireNonNull(path);
+
+    final String pathValue = path.toString();
+    if (!actual.getPath().equals(pathValue)) {
       failWithMessage("%nExpecting task path to be be equal to:%n <%s>%nbut was:%n <%s>", path, actual.getPath());
     }
     return this;

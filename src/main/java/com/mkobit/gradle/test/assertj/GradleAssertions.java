@@ -2,10 +2,9 @@ package com.mkobit.gradle.test.assertj;
 
 import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.BuildTask;
-
-import javax.annotation.Nullable;
 
 /**
  * Assertions for Gradle.

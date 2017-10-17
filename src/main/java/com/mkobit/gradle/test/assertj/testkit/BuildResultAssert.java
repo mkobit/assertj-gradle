@@ -1,11 +1,10 @@
 package com.mkobit.gradle.test.assertj.testkit;
 
 import org.assertj.core.api.AbstractAssert;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.BuildTask;
 import org.gradle.testkit.runner.TaskOutcome;
-
-import javax.annotation.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
