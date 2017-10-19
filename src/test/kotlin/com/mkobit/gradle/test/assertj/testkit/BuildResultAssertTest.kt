@@ -13,6 +13,8 @@ import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import testsupport.assertNoExceptionThrownBy
+import testsupport.assertThatAssertionErrorThrownBy
 import java.util.function.Consumer
 import java.util.regex.Pattern
 
@@ -38,8 +40,8 @@ internal class BuildResultAssertTest {
   @Test
   internal fun `constructed with null BuildResult instance`() {
     val nullActualBuildResultAssert = BuildResultAssert(null)
-    assertThatThrownBy { nullActualBuildResultAssert.isNotNull }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { nullActualBuildResultAssert.isNull() }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { nullActualBuildResultAssert.isNotNull }
+    assertNoExceptionThrownBy { nullActualBuildResultAssert.isNull() }
   }
 
   @Test
@@ -47,8 +49,8 @@ internal class BuildResultAssertTest {
     val buildOutput = "this is the build output"
     whenever(mockBuildResult.output).thenReturn(buildOutput)
 
-    assertThatThrownBy { buildResultAssert.outputContains("nope present") }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { buildResultAssert.outputContains("build output") }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { buildResultAssert.outputContains("nope present") }
+    assertNoExceptionThrownBy { buildResultAssert.outputContains("build output") }
   }
 
   @Test
@@ -56,8 +58,8 @@ internal class BuildResultAssertTest {
     val buildOutput = "this is the build output"
     whenever(mockBuildResult.output).thenReturn(buildOutput)
 
-    assertThatCode { buildResultAssert.outputMatches(Pattern.compile("^.*is the build.*\$")) }.doesNotThrowAnyException()
-    assertThatThrownBy { buildResultAssert.outputMatches(Pattern.compile("^no match here\$")) }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { buildResultAssert.outputMatches(Pattern.compile("^.*is the build.*\$")) }
+    assertThatAssertionErrorThrownBy { buildResultAssert.outputMatches(Pattern.compile("^no match here\$")) }
   }
 
   @Test
@@ -65,8 +67,8 @@ internal class BuildResultAssertTest {
     val buildOutput = "this is the build output"
     whenever(mockBuildResult.output).thenReturn(buildOutput)
 
-    assertThatCode { buildResultAssert.outputDoesNotMatch(Pattern.compile("^no match here\$")) }.doesNotThrowAnyException()
-    assertThatThrownBy { buildResultAssert.outputDoesNotMatch(Pattern.compile("^.*is the build.*\$")) }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { buildResultAssert.outputDoesNotMatch(Pattern.compile("^no match here\$")) }
+    assertThatAssertionErrorThrownBy { buildResultAssert.outputDoesNotMatch(Pattern.compile("^.*is the build.*\$")) }
   }
 
   @Test
@@ -74,8 +76,8 @@ internal class BuildResultAssertTest {
     val buildOutput = "this is the build output"
     whenever(mockBuildResult.output).thenReturn(buildOutput)
 
-    assertThatCode { buildResultAssert.outputDoesNotContain("nope present") }.doesNotThrowAnyException()
-    assertThatThrownBy { buildResultAssert.outputDoesNotContain("build output") }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { buildResultAssert.outputDoesNotContain("nope present") }
+    assertThatAssertionErrorThrownBy { buildResultAssert.outputDoesNotContain("build output") }
   }
 
   @Test
@@ -84,7 +86,7 @@ internal class BuildResultAssertTest {
     whenever(mockBuildResult.output).thenReturn(buildOutput)
     val mockConsumer = mock<Consumer<String>>()
 
-    assertThatCode { buildResultAssert.outputSatisfies(mockConsumer) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { buildResultAssert.outputSatisfies(mockConsumer) }
 
     verify(mockConsumer, times(1)).accept(buildOutput)
   }
@@ -243,9 +245,9 @@ internal class BuildResultAssertTest {
     }
     val buildResultAssert = BuildResultAssert(mockBuildResult)
 
-    assertThatCode { buildResultAssert.hasTaskAtPath(":taskPath") }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { buildResultAssert.hasTaskAtPath(":taskPath") }
     verify(mockBuildResult, times(1)).task(path)
-    assertThatThrownBy { buildResultAssert.hasTaskAtPath(":wrongPath") }.isInstanceOf(AssertionError::class.java)
+    assertThatAssertionErrorThrownBy { buildResultAssert.hasTaskAtPath(":wrongPath") }
   }
 
   @Test
@@ -254,9 +256,9 @@ internal class BuildResultAssertTest {
     whenever(mockBuildResult.task(path)).thenReturn(mockBuildTask)
     val buildResultAssert = BuildResultAssert(mockBuildResult)
 
-    assertThatThrownBy { buildResultAssert.doesNotHaveTaskAtPath(":taskPath") }.isInstanceOf(AssertionError::class.java)
+    assertThatAssertionErrorThrownBy { buildResultAssert.doesNotHaveTaskAtPath(":taskPath") }
     verify(mockBuildResult, times(1)).task(path)
-    assertThatCode { buildResultAssert.doesNotHaveTaskAtPath(":wrongPath") }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { buildResultAssert.doesNotHaveTaskAtPath(":wrongPath") }
   }
 
   @Test

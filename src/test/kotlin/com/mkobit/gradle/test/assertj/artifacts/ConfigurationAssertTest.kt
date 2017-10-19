@@ -4,8 +4,6 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatCode
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.ObjectEnumerableAssert
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ConfigurationPublications
@@ -15,6 +13,8 @@ import org.gradle.api.artifacts.PublishArtifactSet
 import org.gradle.api.artifacts.ResolvableDependencies
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import testsupport.assertNoExceptionThrownBy
+import testsupport.assertThatAssertionErrorThrownBy
 import java.util.function.Consumer
 
 internal class ConfigurationAssertTest {
@@ -40,79 +40,79 @@ internal class ConfigurationAssertTest {
   @Test
   internal fun `constructed with null Configuration instance`() {
     val nullActualConfigurationAssert = ConfigurationAssert(null)
-    assertThatThrownBy { nullActualConfigurationAssert.isNotNull }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { nullActualConfigurationAssert.isNull() }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { nullActualConfigurationAssert.isNotNull }
+    assertNoExceptionThrownBy { nullActualConfigurationAssert.isNull() }
   }
 
   @Test
   internal fun `has UNRESOLVED state`() {
     whenever(mockConfiguration.state).thenReturn(Configuration.State.UNRESOLVED)
 
-    assertThatCode { configurationAssert.hasState(Configuration.State.UNRESOLVED) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.hasState(Configuration.State.UNRESOLVED) }
 
-    assertThatCode { configurationAssert.hasUnresolvedState() }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.hasResolvedState() }.isInstanceOf(AssertionError::class.java)
-    assertThatThrownBy { configurationAssert.hasResolvedWithFailuresState() }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.hasUnresolvedState() }
+    assertThatAssertionErrorThrownBy { configurationAssert.hasResolvedState() }
+    assertThatAssertionErrorThrownBy { configurationAssert.hasResolvedWithFailuresState() }
   }
 
   @Test
   internal fun `has RESOLVED state`() {
     whenever(mockConfiguration.state).thenReturn(Configuration.State.RESOLVED)
 
-    assertThatCode { configurationAssert.hasState(Configuration.State.RESOLVED) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.hasState(Configuration.State.RESOLVED) }
 
-    assertThatThrownBy { configurationAssert.hasUnresolvedState() }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.hasResolvedState() }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.hasResolvedWithFailuresState() }.isInstanceOf(AssertionError::class.java)
+    assertThatAssertionErrorThrownBy { configurationAssert.hasUnresolvedState() }
+    assertNoExceptionThrownBy { configurationAssert.hasResolvedState() }
+    assertThatAssertionErrorThrownBy { configurationAssert.hasResolvedWithFailuresState() }
   }
 
   @Test
   internal fun `has RESOLVED_WITH_FAILURES state`() {
     whenever(mockConfiguration.state).thenReturn(Configuration.State.RESOLVED_WITH_FAILURES)
 
-    assertThatCode { configurationAssert.hasState(Configuration.State.RESOLVED_WITH_FAILURES) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.hasState(Configuration.State.RESOLVED_WITH_FAILURES) }
 
-    assertThatThrownBy { configurationAssert.hasResolvedState() }.isInstanceOf(AssertionError::class.java)
-    assertThatThrownBy { configurationAssert.hasUnresolvedState() }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.hasResolvedWithFailuresState() }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { configurationAssert.hasResolvedState() }
+    assertThatAssertionErrorThrownBy { configurationAssert.hasUnresolvedState() }
+    assertNoExceptionThrownBy { configurationAssert.hasResolvedWithFailuresState() }
   }
 
   @Test
   internal fun `has name equal to`() {
     whenever(mockConfiguration.name).thenReturn("confName")
 
-    assertThatCode { configurationAssert.hasNameEqualTo("confName") }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.hasNameEqualTo("notEqualToThis") }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.hasNameEqualTo("confName") }
+    assertThatAssertionErrorThrownBy { configurationAssert.hasNameEqualTo("notEqualToThis") }
   }
 
   @Test
   internal fun `is visible`() {
     whenever(mockConfiguration.isVisible).thenReturn(true, false)
-    assertThatCode { configurationAssert.isVisible }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.isVisible }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.isVisible }
+    assertThatAssertionErrorThrownBy { configurationAssert.isVisible }
   }
 
   @Test
   internal fun `is not visible`() {
     whenever(mockConfiguration.isVisible).thenReturn(true, false)
-    assertThatThrownBy { configurationAssert.isNotVisible }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.isNotVisible }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { configurationAssert.isNotVisible }
+    assertNoExceptionThrownBy { configurationAssert.isNotVisible }
   }
 
   @Test
   internal fun `extends from contains`() {
     val mockAdditionalConfiguration: Configuration = mock()
     whenever(mockConfiguration.extendsFrom).thenReturn(setOf(mockAdditionalConfiguration), emptySet())
-    assertThatCode { configurationAssert.extendsFromContains(mockAdditionalConfiguration) }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.extendsFromContains(mockAdditionalConfiguration) }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.extendsFromContains(mockAdditionalConfiguration) }
+    assertThatAssertionErrorThrownBy { configurationAssert.extendsFromContains(mockAdditionalConfiguration) }
   }
 
   @Test
   internal fun `extends from does not contain`() {
     val mockAdditionalConfiguration: Configuration = mock()
     whenever(mockConfiguration.extendsFrom).thenReturn(setOf(mockAdditionalConfiguration), emptySet())
-    assertThatThrownBy { configurationAssert.extendsFromDoesNotContain(mockAdditionalConfiguration) }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.extendsFromDoesNotContain(mockAdditionalConfiguration) }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { configurationAssert.extendsFromDoesNotContain(mockAdditionalConfiguration) }
+    assertNoExceptionThrownBy { configurationAssert.extendsFromDoesNotContain(mockAdditionalConfiguration) }
   }
 
   @Test
@@ -120,46 +120,46 @@ internal class ConfigurationAssertTest {
     val extendsFrom: Set<Configuration> = mock()
     whenever(mockConfiguration.extendsFrom).thenReturn(extendsFrom)
     val mockRequirements: Consumer<Set<Configuration>> = mock()
-    assertThatCode { configurationAssert.extendsFromSatisfies(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.extendsFromSatisfies(mockRequirements) }
     verify(mockRequirements).accept(extendsFrom)
   }
 
   @Test
   internal fun `is transitive`() {
     whenever(mockConfiguration.isTransitive).thenReturn(true, false)
-    assertThatCode { configurationAssert.isTransitive}.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.isTransitive }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.isTransitive}
+    assertThatAssertionErrorThrownBy { configurationAssert.isTransitive }
   }
 
   @Test
   internal fun `is not transitive`() {
     whenever(mockConfiguration.isTransitive).thenReturn(true, false)
-    assertThatThrownBy { configurationAssert.isNotTransitive }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.isNotTransitive}.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { configurationAssert.isNotTransitive }
+    assertNoExceptionThrownBy { configurationAssert.isNotTransitive}
   }
 
   @Test
   internal fun `has description equal to`() {
     whenever(mockConfiguration.description).thenReturn("description")
 
-    assertThatCode { configurationAssert.hasDescriptionEqualTo("description") }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.hasDescriptionEqualTo("notEqualHere") }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.hasDescriptionEqualTo("description") }
+    assertThatAssertionErrorThrownBy { configurationAssert.hasDescriptionEqualTo("notEqualHere") }
   }
 
   @Test
   internal fun `hierarchy contains`() {
     val otherConfiguration: Configuration = mock()
     whenever(mockConfiguration.hierarchy).thenReturn(setOf(otherConfiguration), emptySet())
-    assertThatCode { configurationAssert.hierarchyContains(otherConfiguration) }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.hierarchyContains(otherConfiguration) }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.hierarchyContains(otherConfiguration) }
+    assertThatAssertionErrorThrownBy { configurationAssert.hierarchyContains(otherConfiguration) }
   }
 
   @Test
   internal fun `hierarchy does not contain`() {
     val otherConfiguration: Configuration = mock()
     whenever(mockConfiguration.hierarchy).thenReturn(setOf(otherConfiguration), emptySet())
-    assertThatThrownBy { configurationAssert.hierarchyDoesNotContain(otherConfiguration) }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.hierarchyDoesNotContain(otherConfiguration) }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { configurationAssert.hierarchyDoesNotContain(otherConfiguration) }
+    assertNoExceptionThrownBy { configurationAssert.hierarchyDoesNotContain(otherConfiguration) }
   }
 
   @Test
@@ -167,15 +167,15 @@ internal class ConfigurationAssertTest {
     val hierarchy: Set<Configuration> = mock()
     val mockRequirements: Consumer<Set<Configuration>> = mock()
     whenever(mockConfiguration.hierarchy).thenReturn(hierarchy)
-    assertThatCode { configurationAssert.hierarchySatisfies(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.hierarchySatisfies(mockRequirements) }
     verify(mockRequirements).accept(hierarchy)
   }
 
   @Test
   internal fun `upload task name equal to`() {
     whenever(mockConfiguration.uploadTaskName).thenReturn("upload")
-    assertThatCode { configurationAssert.uploadTaskNameEqualTo("upload") }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.uploadTaskNameEqualTo("notEqualHere") }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.uploadTaskNameEqualTo("upload") }
+    assertThatAssertionErrorThrownBy { configurationAssert.uploadTaskNameEqualTo("notEqualHere") }
   }
 
   @Test
@@ -183,7 +183,7 @@ internal class ConfigurationAssertTest {
     val dependencies: DependencySet = mock()
     val mockRequirements: Consumer<DependencySet> = mock()
     whenever(mockConfiguration.dependencies).thenReturn(dependencies)
-    assertThatCode { configurationAssert.dependenciesSatisfy(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.dependenciesSatisfy(mockRequirements) }
     verify(mockRequirements).accept(dependencies)
   }
 
@@ -192,7 +192,7 @@ internal class ConfigurationAssertTest {
     val allDependencies: DependencySet = mock()
     val mockRequirements: Consumer<DependencySet> = mock()
     whenever(mockConfiguration.allDependencies).thenReturn(allDependencies)
-    assertThatCode { configurationAssert.allDependenciesSatisfy(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.allDependenciesSatisfy(mockRequirements) }
     verify(mockRequirements).accept(allDependencies)
   }
 
@@ -201,7 +201,7 @@ internal class ConfigurationAssertTest {
     val artifacts: PublishArtifactSet = mock()
     val mockRequirements: Consumer<PublishArtifactSet> = mock()
     whenever(mockConfiguration.artifacts).thenReturn(artifacts)
-    assertThatCode { configurationAssert.artifactsSatisfy(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.artifactsSatisfy(mockRequirements) }
     verify(mockRequirements).accept(artifacts)
   }
 
@@ -210,7 +210,7 @@ internal class ConfigurationAssertTest {
     val allArtifacts: PublishArtifactSet = mock()
     val mockRequirements: Consumer<PublishArtifactSet> = mock()
     whenever(mockConfiguration.allArtifacts).thenReturn(allArtifacts)
-    assertThatCode { configurationAssert.allArtifactsSatisfy(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.allArtifactsSatisfy(mockRequirements) }
     verify(mockRequirements).accept(allArtifacts)
   }
 
@@ -219,7 +219,7 @@ internal class ConfigurationAssertTest {
     val mockRequirements: Consumer<Set<ExcludeRule>> = mock()
     val excludeRules: Set<ExcludeRule> = mock()
     whenever(mockConfiguration.excludeRules).thenReturn(excludeRules)
-    assertThatCode { configurationAssert.excludeRulesSatisfy(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.excludeRulesSatisfy(mockRequirements) }
     verify(mockRequirements).accept(excludeRules)
   }
 
@@ -228,7 +228,7 @@ internal class ConfigurationAssertTest {
     val mockRequirements: Consumer<ResolvableDependencies> = mock()
     val incoming: ResolvableDependencies = mock()
     whenever(mockConfiguration.incoming).thenReturn(incoming)
-    assertThatCode { configurationAssert.incomingSatisfy(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.incomingSatisfy(mockRequirements) }
     verify(mockRequirements).accept(incoming)
   }
 
@@ -237,35 +237,35 @@ internal class ConfigurationAssertTest {
     val mockRequirements: Consumer<ConfigurationPublications> = mock()
     val outgoing: ConfigurationPublications = mock()
     whenever(mockConfiguration.outgoing).thenReturn(outgoing)
-    assertThatCode { configurationAssert.outgoingSatisfy(mockRequirements) }.doesNotThrowAnyException()
+    assertNoExceptionThrownBy { configurationAssert.outgoingSatisfy(mockRequirements) }
     verify(mockRequirements).accept(outgoing)
   }
 
   @Test
   internal fun `is can be consumed`() {
     whenever(mockConfiguration.isCanBeConsumed).thenReturn(true, false)
-    assertThatCode { configurationAssert.isCanBeConsumed }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.isCanBeConsumed }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.isCanBeConsumed }
+    assertThatAssertionErrorThrownBy { configurationAssert.isCanBeConsumed }
   }
 
   @Test
   internal fun `is cannot be consumed`() {
     whenever(mockConfiguration.isCanBeConsumed).thenReturn(true, false)
-    assertThatThrownBy { configurationAssert.isNotCanBeConsumed }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.isNotCanBeConsumed }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { configurationAssert.isNotCanBeConsumed }
+    assertNoExceptionThrownBy { configurationAssert.isNotCanBeConsumed }
   }
 
   @Test
   internal fun `is can be resolved`() {
     whenever(mockConfiguration.isCanBeResolved).thenReturn(true, false)
-    assertThatCode { configurationAssert.isCanBeResolved }.doesNotThrowAnyException()
-    assertThatThrownBy { configurationAssert.isCanBeResolved }.isInstanceOf(AssertionError::class.java)
+    assertNoExceptionThrownBy { configurationAssert.isCanBeResolved }
+    assertThatAssertionErrorThrownBy { configurationAssert.isCanBeResolved }
   }
 
   @Test
   internal fun `is cannot be resolved`() {
     whenever(mockConfiguration.isCanBeResolved).thenReturn(true, false)
-    assertThatThrownBy { configurationAssert.isNotCanBeResolved }.isInstanceOf(AssertionError::class.java)
-    assertThatCode { configurationAssert.isNotCanBeResolved }.doesNotThrowAnyException()
+    assertThatAssertionErrorThrownBy { configurationAssert.isNotCanBeResolved }
+    assertNoExceptionThrownBy { configurationAssert.isNotCanBeResolved }
   }
 }
