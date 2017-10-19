@@ -1,5 +1,6 @@
 package testsupport
 
+import org.assertj.core.api.AbstractThrowableAssert
 import org.assertj.core.api.SoftAssertions
 
 /**

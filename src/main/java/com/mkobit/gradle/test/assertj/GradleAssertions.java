@@ -1,8 +1,10 @@
 package com.mkobit.gradle.test.assertj;
 
+import com.mkobit.gradle.test.assertj.artifacts.ConfigurationAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.BuildTask;
 
@@ -33,5 +35,14 @@ public final class GradleAssertions {
    */
   public static BuildResultAssert assertThat(final @Nullable BuildResult buildResult) {
     return new BuildResultAssert(buildResult);
+  }
+
+  /**
+   * Assert on a {@link Configuration}.
+   * @param configuration the result to assert on
+   * @return a new {@link ConfigurationAssert} instance
+   */
+  public static ConfigurationAssert assertThat(final @Nullable Configuration configuration) {
+    return new ConfigurationAssert(configuration);
   }
 }

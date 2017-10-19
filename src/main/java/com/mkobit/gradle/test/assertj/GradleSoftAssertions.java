@@ -1,9 +1,11 @@
 package com.mkobit.gradle.test.assertj;
 
+import com.mkobit.gradle.test.assertj.artifacts.ConfigurationAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert;
 import org.assertj.core.api.SoftAssertions;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.BuildTask;
 
@@ -18,5 +20,9 @@ public final class GradleSoftAssertions extends SoftAssertions {
 
   public BuildResultAssert assertThat(final @Nullable BuildResult buildResult) {
     return proxy(BuildResultAssert.class, BuildResult.class, buildResult);
+  }
+
+  public ConfigurationAssert assertThat(final @Nullable Configuration configuration) {
+    return proxy(ConfigurationAssert.class, Configuration.class, configuration);
   }
 }

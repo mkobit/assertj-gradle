@@ -1,11 +1,12 @@
 package com.mkobit.gradle.test.assertj
 
 import com.mkobit.gradle.test.assertj.GradleAssertions.assertThat
+import com.mkobit.gradle.test.assertj.artifacts.ConfigurationAssert
 import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert
 import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert
 import com.nhaarman.mockito_kotlin.mock
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.Assertions
+import org.gradle.api.artifacts.Configuration
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.junit.jupiter.api.Test
@@ -13,15 +14,22 @@ import org.junit.jupiter.api.Test
 internal class GradleAssertionsTest {
   @Test
   internal fun `can use static factory method for BuildTaskAssert`() {
-    val mockBuildTask = mock<BuildTask>()
-    assertThatCode { assertThat(mockBuildTask) }.doesNotThrowAnyException()
-    assertThat(assertThat(mockBuildTask)).isExactlyInstanceOf(BuildTaskAssert::class.java)
+    val mockBuildTask: BuildTask = mock()
+    Assertions.assertThatCode { assertThat(mockBuildTask) }.doesNotThrowAnyException()
+    Assertions.assertThat(assertThat(mockBuildTask)).isExactlyInstanceOf(BuildTaskAssert::class.java)
   }
 
   @Test
   internal fun `can use static factory method for BuildResultAssert`() {
-    val mockBuildResult = mock<BuildResult>()
-    assertThatCode { assertThat(mockBuildResult) }.doesNotThrowAnyException()
-    assertThat(assertThat(mockBuildResult)).isExactlyInstanceOf(BuildResultAssert::class.java)
+    val mockBuildResult: BuildResult = mock()
+    Assertions.assertThatCode { assertThat(mockBuildResult) }.doesNotThrowAnyException()
+    Assertions.assertThat(assertThat(mockBuildResult)).isExactlyInstanceOf(BuildResultAssert::class.java)
+  }
+
+  @Test
+  internal fun `can use static factory method for ConfigurationAssert`() {
+    val mockConfiguration: Configuration = mock()
+    Assertions.assertThatCode { assertThat(mockConfiguration) }.doesNotThrowAnyException()
+    Assertions.assertThat(assertThat(mockConfiguration)).isExactlyInstanceOf(ConfigurationAssert::class.java)
   }
 }

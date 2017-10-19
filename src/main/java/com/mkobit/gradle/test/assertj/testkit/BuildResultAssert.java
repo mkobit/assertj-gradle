@@ -178,7 +178,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
   }
 
   /**
-   * Verifies a task exists at the provided {@code path} and that is satisfies the provided {@code requirements}.
+   * Verifies a task exists at the provided {@code path} and that it satisfies the provided {@code requirements}.
    *
    * @param path the task path
    * @param requirements the requirements for the task at the provided path

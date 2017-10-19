@@ -2,6 +2,7 @@ package com.mkobit.gradle.test.assertj
 
 import com.nhaarman.mockito_kotlin.mock
 import org.assertj.core.api.Assertions
+import org.gradle.api.artifacts.Configuration
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.junit.jupiter.api.Test
@@ -29,5 +30,17 @@ internal class GradleSoftAssertionsTest {
     Assertions.assertThatThrownBy {
       GradleSoftAssertions().apply { assertThat(mockBuildResult).isNull() }.assertAll()
     }.isInstanceOf(AssertionError::class.java)
+  }
+
+  @Test
+  internal fun `can use soft assertions with Configuration`() {
+    val mockConfiguration: Configuration = mock()
+    Assertions.assertThatCode {
+      GradleSoftAssertions().apply { assertThat(mockConfiguration).isNotNull }
+    }.doesNotThrowAnyException()
+    Assertions.assertThatThrownBy {
+      GradleSoftAssertions().apply { assertThat(mockConfiguration).isNull() }.assertAll()
+    }.isInstanceOf(AssertionError::class.java)
+
   }
 }
