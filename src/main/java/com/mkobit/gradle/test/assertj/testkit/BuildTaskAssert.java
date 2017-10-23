@@ -36,7 +36,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
     if (!actual.getPath().equals(pathValue)) {
       failWithMessage("%nExpecting task path to be be equal to:%n <%s>%nbut was:%n <%s>", path, actual.getPath());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -56,7 +56,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
     if (!actual.getPath().startsWith(pathValue)) {
       failWithMessage("%nExpecting task path to start with:%n <%s>%nbut was:%n <%s>", pathValue, actual.getPath());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -76,7 +76,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
     if (!actual.getPath().endsWith(pathValue)) {
       failWithMessage("%nExpecting task path to end with:%n <%s>%nbut was:%n <%s>", pathValue, actual.getPath());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -95,7 +95,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
     if (!actual.getPath().contains(pathValue)) {
       failWithMessage("%nExpecting task path to contain:%n <%s>%nbut was:%n <%s>", pathValue, actual.getPath());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -113,7 +113,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
     if (!pattern.matcher(actual.getPath()).matches()) {
       failWithMessage("%nExpecting task path to match:%n <%s>%nbut was:%n <%s>", pattern, actual.getPath());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -131,7 +131,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
     if (pattern.matcher(actual.getPath()).matches()) {
       failWithMessage("%nExpecting task path to match:%n <%s>%nbut was:%n <%s>", pattern, actual.getPath());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -145,7 +145,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert pathSatisfies(final Consumer<String> requirements) {
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getPath());
-    return this;
+    return myself;
   }
 
   /**
@@ -156,7 +156,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert isFailed() {
     isNotNull();
     assertTaskOutcome(TaskOutcome.FAILED);
-    return this;
+    return myself;
   }
 
   /**
@@ -168,7 +168,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert isFromCache() {
     isNotNull();
     assertTaskOutcome(TaskOutcome.FROM_CACHE);
-    return this;
+    return myself;
   }
 
   /**
@@ -180,7 +180,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert isNoSource() {
     isNotNull();
     assertTaskOutcome(TaskOutcome.NO_SOURCE);
-    return this;
+    return myself;
   }
 
   /**
@@ -192,7 +192,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert isSkipped() {
     isNotNull();
     assertTaskOutcome(TaskOutcome.SKIPPED);
-    return this;
+    return myself;
   }
 
   /**
@@ -204,7 +204,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert isSuccess() {
     isNotNull();
     assertTaskOutcome(TaskOutcome.SUCCESS);
-    return this;
+    return myself;
   }
 
   /**
@@ -216,7 +216,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert isUpToDate() {
     isNotNull();
     assertTaskOutcome(TaskOutcome.UP_TO_DATE);
-    return this;
+    return myself;
   }
 
   /**
@@ -231,7 +231,7 @@ public class BuildTaskAssert extends AbstractAssert<BuildTaskAssert, BuildTask> 
   public BuildTaskAssert hasTaskOutcome(final TaskOutcome taskOutcome) {
     isNotNull();
     assertTaskOutcome(taskOutcome);
-    return this;
+    return myself;
   }
 
   private void assertTaskOutcome(final TaskOutcome expected) {

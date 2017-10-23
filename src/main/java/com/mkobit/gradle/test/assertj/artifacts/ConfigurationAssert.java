@@ -74,7 +74,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (actual.getState() != state) {
       failWithMessage("%nExpecting configuration named [%s] to have state:%n <%s>%nbut was:%n <%s>", actual.getName(), state, actual.getState());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -92,7 +92,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (!actual.getName().equals(configurationName)) {
       failWithMessage("%nExpecting configuration name to be equal to:%n <%s>%nbut was:%n <%s>", configurationName, actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -106,7 +106,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (!actual.isVisible()) {
       failWithMessage("%nExpecting configuration named [%s] to be visible but was not", actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -120,7 +120,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (actual.isVisible()) {
       failWithMessage("%nExpecting configuration named [%s] to not be visible but was", actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -139,7 +139,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
       // TODO: mkobit - improve failure message
       failWithMessage("%nExpecting configuration named [%s] extendsFrom to contain configuration:%n <%s>%nbut did not", actual.getName(), configuration.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -158,7 +158,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
       // TODO: mkobit - improve failure message
       failWithMessage("%nExpecting configuration named [%s] extendsFrom to not contain configuration:%n <%s>%nbut did", actual.getName(), configuration.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -172,7 +172,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getExtendsFrom());
-    return this;
+    return myself;
   }
 
   /**
@@ -186,7 +186,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (!actual.isTransitive()) {
       failWithMessage("%nExpecting configuration named [%s] to be transitive but was not", actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -200,7 +200,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (actual.isTransitive()) {
       failWithMessage("%nExpecting configuration named [%s] to not be transitive but was", actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -217,7 +217,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (!Objects.equals(actual.getDescription(), descriptioValue)) {
       failWithMessage("%nExpecting configuration named [%s] to have description equal to:%n <%s>%nbut was:%n <%s>", actual.getName(), descriptioValue, actual.getDescription());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -235,7 +235,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
       // TODO: mkobit - improve failure message
       failWithMessage("%nExpecting configuration named [%s] hierarchy to contain configuration:%n <%s>%nbut did not", actual.getName(), configuration);
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -254,7 +254,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
       // TODO: mkobit - improve failure message
       failWithMessage("%nExpecting configuration named [%s] hierarchy to not contain configuration:%n <%s>%nbut did", actual.getName(), configuration);
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -268,7 +268,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getHierarchy());
-    return this;
+    return myself;
   }
 
   // ResolvedConfiguration - skipped for now
@@ -288,7 +288,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (!actual.getUploadTaskName().equals(uploadTaskNameValue)) {
       failWithMessage("%nExpecting configuration named [%s] uploadTaskName to be equal to:%n <%s>%nbut was:%n <s>", actual.getName(), uploadTaskNameValue, actual.getUploadTaskName());
     }
-    return this;
+    return myself;
   }
 
   // BuildDependencies - skipped for now
@@ -306,7 +306,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getDependencies());
-    return this;
+    return myself;
   }
 
   // getAllDependencies() - introduce friendlier APIs. It is essentially a DomainObjectSet<Dependency>.
@@ -322,7 +322,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getAllDependencies());
-    return this;
+    return myself;
   }
 
   // getArtifacts() - introduce friendlier APIs. It is essentially a DomainObjectSet<PublishArtifact>.
@@ -338,7 +338,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getArtifacts());
-    return this;
+    return myself;
   }
   // getAllArtifacts() - introduce friendlier APIs. It is essentially a DomainObjectSet<PublishArtifact>.
 
@@ -353,7 +353,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getAllArtifacts());
-    return this;
+    return myself;
   }
 
   // getExcludeRules() - possibly friendlier APIs? Depends on usage
@@ -369,7 +369,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getExcludeRules());
-    return this;
+    return myself;
   }
 
   // getAll() - skipped for now
@@ -386,7 +386,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getIncoming());
-    return this;
+    return myself;
   }
 
   // getOutgoing() @Incubating
@@ -402,7 +402,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getOutgoing());
-    return this;
+    return myself;
   }
 
   /**
@@ -416,7 +416,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (!actual.isCanBeConsumed()) {
       failWithMessage("%nExpecting that configuration named [%s] can be consumed but it cannot", actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -430,7 +430,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (actual.isCanBeConsumed()) {
       failWithMessage("%nExpecting that configuration named [%s] cannot be consumed but it can", actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -444,7 +444,7 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (!actual.isCanBeResolved()) {
       failWithMessage("%nExpecting that configuration named [%s] can be resolved but it cannot", actual.getName());
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -458,6 +458,6 @@ public class ConfigurationAssert extends AbstractAssert<ConfigurationAssert, Con
     if (actual.isCanBeResolved()) {
       failWithMessage("%nExpecting that configuration named [%s] cannot be resolved but it can", actual.getName());
     }
-    return this;
+    return myself;
   }
 }

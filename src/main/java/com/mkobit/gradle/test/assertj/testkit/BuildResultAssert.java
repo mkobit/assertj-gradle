@@ -45,7 +45,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
                       sequence);
     }
 
-    return this;
+    return myself;
   }
 
   /**
@@ -67,7 +67,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
                       sequence);
     }
 
-    return this;
+    return myself;
   }
 
   /**
@@ -87,7 +87,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
       failWithMessage("%nExpecting build output to match:%n <%s>%nbut was:%n <%s>", pattern, actual.getOutput());
     }
 
-    return this;
+    return myself;
   }
 
   /**
@@ -107,7 +107,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
       failWithMessage("%nExpecting build output not to match:%n <%s>%nbut was:%n <%s>", pattern, actual.getOutput());
     }
 
-    return this;
+    return myself;
   }
 
   /**
@@ -124,7 +124,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
     Objects.requireNonNull(requirements,
                            "Consumer<String> of output expressing assertions requirements must not be null");
     requirements.accept(actual.getOutput());
-    return this;
+    return myself;
   }
   //  List<String> taskPaths(TaskOutcome var1);
   //  List<BuildTask> tasks(TaskOutcome var1);
@@ -152,7 +152,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
     if (buildTask == null) {
       failWithMessage("%nExpecting build to have task at path:%n <%s>%nbut did not", taskPath);
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -174,7 +174,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
     if (buildTask != null) {
       failWithMessage("%nExpecting build to not have task at path:%n <%s>%nbut did", taskPath);
     }
-    return this;
+    return myself;
   }
 
   /**
@@ -203,7 +203,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
           taskPath);
     }
     requirements.accept(buildTask);
-    return this;
+    return myself;
   }
 
   /**
@@ -226,7 +226,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
     Objects.requireNonNull(requirements, "requirements");
 
     requirements.accept(actual.tasks(outcome));
-    return this;
+    return myself;
   }
 
   /**
@@ -249,7 +249,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
     Objects.requireNonNull(requirements, "requirements must not be null");
 
     requirements.accept(actual.taskPaths(outcome));
-    return this;
+    return myself;
   }
 
   /**
@@ -264,7 +264,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
     isNotNull();
     Objects.requireNonNull(requirements, "requirements");
     requirements.accept(actual.getTasks());
-    return this;
+    return myself;
   }
 
   /**
@@ -383,7 +383,7 @@ public class BuildResultAssert extends AbstractAssert<BuildResultAssert, BuildRe
                       outcome,
                       buildTask.getOutcome());
     }
-    return this;
+    return myself;
   }
 
   private String formatTasksForFailureMessage(final List<BuildTask> tasks) {
