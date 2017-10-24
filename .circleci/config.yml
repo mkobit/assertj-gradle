@@ -25,7 +25,10 @@ jobs:
           name: Show Java Version
 
       - run:
-          command: ./gradlew build --stacktrace --scan
+          command: |
+            ./gradlew build --stacktrace --scan
+            ./gradlew wrapper --gradle-version 4.3-rc-3
+            ./gradlew build --stacktrace --scan
           name: Gradle Build
 
       - save_cache:
