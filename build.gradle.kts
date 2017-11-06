@@ -21,12 +21,12 @@ buildscript {
 }
 
 plugins {
-  id("com.gradle.build-scan") version "1.10"
+  id("com.gradle.build-scan") version "1.10.1"
   `java-library`
   `maven-publish`
   kotlin("jvm")
-  id("com.github.ben-manes.versions") version "0.15.0"
-  id("com.jfrog.bintray") version "1.7.3"
+  id("com.github.ben-manes.versions") version "0.17.0"
+  id("com.jfrog.bintray") version "1.8.0"
 }
 
 apply {
@@ -71,11 +71,6 @@ buildScan {
   }
 }
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 repositories {
   jcenter()
   mavenCentral()
@@ -86,9 +81,10 @@ dependencies {
   api(gradleTestKit())
   api("org.assertj", "assertj-core", "3.8.0")
   // Should this be an API dependency?
-  compileOnly("org.checkerframework", "checker-qual", "2.2.1")
+  compileOnly("org.checkerframework", "checker-qual", "2.2.2")
   testImplementation(kotlin("stdlib-jre8"))
   testImplementation(kotlin("reflect"))
+  testImplementation("org.assertj:assertj-core:3.8.0")
   testImplementation("org.mockito:mockito-core:2.11.0")
   testImplementation("com.nhaarman:mockito-kotlin:1.5.0")
   DependencyInfo.junitTestImplementationArtifacts.forEach {
@@ -110,12 +106,26 @@ extensions.getByType(JUnitPlatformExtension::class.java).apply {
   details = Details.TREE
 }
 
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 val main = java.sourceSets["main"]!!
 // No Kotlin in main source set
 main.kotlin.setSrcDirs(emptyList<Any>())
 
 tasks {
+  "wrapper"(Wrapper::class) {
+    gradleVersion = "4.3"
+    distributionType = Wrapper.DistributionType.ALL
+  }
+
   withType<Jar> {
+    from(project.projectDir) {
+      include("LICENSE.txt")
+      into("META-INF")
+    }
     manifest {
       attributes(mapOf(
         "Build-Revision" to gitCommitSha,
@@ -124,15 +134,6 @@ tasks {
         // TODO: include Gradle version?
       ))
     }
-    from(project.projectDir) {
-      include("LICENSE.txt")
-      into("META-INF")
-    }
-  }
-
-  "wrapper"(Wrapper::class) {
-    gradleVersion = "4.3"
-    distributionType = Wrapper.DistributionType.ALL
   }
 
   withType<Javadoc> {
@@ -146,14 +147,14 @@ tasks {
     kotlinOptions.jvmTarget = "1.8"
   }
 
-  val sourcesJar by tasks.creating(Jar::class) {
+  val sourcesJar by creating(Jar::class) {
     classifier = "sources"
     from(main.allSource)
     description = "Assembles a JAR of the source code"
     group = JavaBasePlugin.DOCUMENTATION_GROUP
   }
 
-  val javadocJar by tasks.creating(Jar::class) {
+  val javadocJar by creating(Jar::class) {
     val javadoc by tasks.getting(Javadoc::class)
     dependsOn(javadoc)
     from(javadoc.destinationDir)
