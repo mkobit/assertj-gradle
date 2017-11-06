@@ -36,12 +36,6 @@ jobs:
           command: ./gradlew build --stacktrace --scan
           name: Gradle Build
 
-      - run:
-          command: |
-            ./gradlew wrapper --gradle-version 4.3-rc-3
-            ./gradlew build --stacktrace --scan
-          name: Build against other Gradle versions
-
       - save_cache:
           paths:
             - ~/.gradle
