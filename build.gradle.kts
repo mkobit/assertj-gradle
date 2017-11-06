@@ -1,3 +1,5 @@
+import buildsrc.DependencyInfo
+import buildsrc.ProjectInfo
 import com.jfrog.bintray.gradle.BintrayExtension
 import java.io.ByteArrayOutputStream
 import org.gradle.api.internal.HasConvention
@@ -36,10 +38,6 @@ version = "0.2.0"
 group = "com.mkobit.gradle.test"
 description = "AssertJ extensions for Gradle"
 
-val projectUrl by extra { "https://github.com/mkobit/assertj-gradle" }
-val issuesUrl by extra { "https://github.com/mkobit/assertj-gradle/issues" }
-val scmUrl by extra { "https://github.com/mkobit/assertj-gradle.git" }
-
 val gitCommitSha: String by lazy {
   ByteArrayOutputStream().use {
     project.exec {
@@ -70,7 +68,7 @@ buildScan {
     env("CIRCLE_COMPARE_URL")?.let { link("Diff", it) }
     env("CIRCLE_REPOSITORY_URL")?.let { value("Repository", it) }
     env("CIRCLE_PR_NUMBER")?.let { value("Pull Request Number", it) }
-    link("Repository", "https://github.com/mkobit/jenkins-pipeline-shared-libraries-gradle-plugin")
+    link("Repository", ProjectInfo.projectUrl)
   }
 }
 
@@ -84,31 +82,26 @@ repositories {
   mavenCentral()
 }
 
-val kotlinVersion by project
-val junitPlatformVersion: String by rootProject.extra
-val junitTestImplementationArtifacts: Map<String, Map<String, String>> by rootProject.extra
-val junitTestRuntimeOnlyArtifacts: Map<String, Map<String, String>> by rootProject.extra
-
 dependencies {
   api(gradleApi())
   api(gradleTestKit())
   api("org.assertj", "assertj-core", "3.8.0")
   // Should this be an API dependency?
   compileOnly("org.checkerframework", "checker-qual", "2.2.1")
-  testImplementation(kotlin("stdlib-jre8", kotlinVersion as String))
-  testImplementation(kotlin("reflect", kotlinVersion as String))
+  testImplementation(kotlin("stdlib-jre8"))
+  testImplementation(kotlin("reflect"))
   testImplementation("org.mockito:mockito-core:2.11.0")
   testImplementation("com.nhaarman:mockito-kotlin:1.5.0")
-  junitTestImplementationArtifacts.values.forEach {
+  DependencyInfo.junitTestImplementationArtifacts.forEach {
     testImplementation(it)
   }
-  junitTestRuntimeOnlyArtifacts.values.forEach {
+  DependencyInfo.junitTestRuntimeOnlyArtifacts.forEach {
     testRuntimeOnly(it)
   }
 }
 
 extensions.getByType(JUnitPlatformExtension::class.java).apply {
-  platformVersion = junitPlatformVersion
+  platformVersion = DependencyInfo.junitPlatformVersion
   filters {
     engines {
       include("junit-jupiter")
@@ -127,6 +120,7 @@ tasks {
     manifest {
       attributes(mapOf(
         "Build-Revision" to gitCommitSha,
+        "Automatic-Module-Name" to ProjectInfo.automaticModuleName,
         "Implementation-Version" to project.version
         // TODO: include Gradle version?
       ))
@@ -138,7 +132,7 @@ tasks {
   }
 
   "wrapper"(Wrapper::class) {
-    gradleVersion = "4.2.1"
+    gradleVersion = "4.3"
     distributionType = Wrapper.DistributionType.ALL
   }
 
@@ -191,7 +185,6 @@ tasks {
   val docVersionChecks by creating {
     group = PublishingPlugin.PUBLISH_TASK_GROUP
     description = "Checks if the repository documentation is up-to-date for the version $version"
-    val readme = file("README.adoc")
     val changeLog = file("CHANGELOG.adoc")
     inputs.file(changeLog)
     // Output is just used for up-to-date checking
@@ -245,7 +238,7 @@ publishing {
       pom.withXml {
         asNode().apply {
           appendNode("description", project.description)
-          appendNode("url", projectUrl)
+          appendNode("url", ProjectInfo.projectUrl)
           appendNode("licenses").apply {
             appendNode("license").apply {
               appendNode("name", "The MIT License")
@@ -274,9 +267,9 @@ bintray {
     setLabels("gradle", "assertj", "assertion", "testkit")
     setLicenses("MIT")
     desc = project.description
-    websiteUrl = projectUrl
-    issueTrackerUrl = issuesUrl
-    vcsUrl = scmUrl
+    websiteUrl = ProjectInfo.projectUrl
+    issueTrackerUrl = ProjectInfo.issuesUrl
+    vcsUrl = ProjectInfo.scmUrl
   })
 }
 
