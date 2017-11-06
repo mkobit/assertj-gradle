@@ -30,7 +30,6 @@ plugins {
 }
 
 apply {
-  from("gradle/junit5.gradle.kts")
   plugin("org.junit.platform.gradle.plugin")
 }
 
