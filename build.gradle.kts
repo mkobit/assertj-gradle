@@ -272,4 +272,3 @@ bintray {
     vcsUrl = ProjectInfo.scmUrl
   })
 }
-

@@ -1,13 +1,14 @@
 = AssertJ Gradle
 :toc:
-:uri-github-releases: https://github.com/mkobit/assertj-gradlejenkins-pipeline-shared-libraries-gradle-plugin/releases
+:github-repo-id: assertj-gradle
+:uri-github-releases: https://github.com/mkobit/{github-repo-id}/releases
 :uri-gradle-BuildResult: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildResult.html
 :uri-gradle-BuildTask: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildTask.html
 :uri-assertj: https://joel-costigliola.github.io/assertj/
-:uri-build-status-image: https://circleci.com/gh/mkobit/assertj-gradle/tree/master.svg?style=svg
-:circle-ci-status-badge: image:{uri-build-status-image}["CircleCI", link="https://circleci.com/gh/mkobit/assertj-gradle/tree/master"]
-:uri-version-badge-image: https://api.bintray.com/packages/mkobit/gradle/assertj-gradle/images/download.svg
-:uri-bintray-package: https://bintray.com/mkobit/gradle/assertj-gradle/_latestVersion
+:uri-build-status-image: https://circleci.com/gh/mkobit/{github-repo-id}/tree/master.svg?style=svg
+:circle-ci-status-badge: image:{uri-build-status-image}["CircleCI", link="https://circleci.com/gh/mkobit/{github-repo-id}/tree/master"]
+:uri-version-badge-image: https://api.bintray.com/packages/mkobit/gradle/{github-repo-id}/images/download.svg
+:uri-bintray-package: https://bintray.com/mkobit/gradle/{github-repo-id}/_latestVersion
 :version-badge: image:{uri-version-badge-image}["Latest Release Version", link="{uri-bintray-package}"]
 
 {version-badge}
