@@ -21,7 +21,7 @@ buildscript {
 }
 
 plugins {
-  id("com.gradle.build-scan") version "1.10.1"
+  id("com.gradle.build-scan") version "1.10.3"
   `java-library`
   `maven-publish`
   kotlin("jvm")
@@ -65,7 +65,6 @@ buildScan {
     env("CIRCLE_BUILD_URL")?.let { link("Build URL", it) }
     env("CIRCLE_SHA1")?.let { value("Revision", it) }
     env("CIRCLE_COMPARE_URL")?.let { link("Diff", it) }
-    env("CIRCLE_REPOSITORY_URL")?.let { value("Repository", it) }
     env("CIRCLE_PR_NUMBER")?.let { value("Pull Request Number", it) }
     link("Repository", ProjectInfo.projectUrl)
   }
@@ -85,7 +84,7 @@ dependencies {
   testImplementation(kotlin("stdlib-jre8"))
   testImplementation(kotlin("reflect"))
   testImplementation("org.assertj:assertj-core:3.8.0")
-  testImplementation("org.mockito:mockito-core:2.11.0")
+  testImplementation("org.mockito:mockito-core:2.12.0")
   testImplementation("com.nhaarman:mockito-kotlin:1.5.0")
   DependencyInfo.junitTestImplementationArtifacts.forEach {
     testImplementation(it)
