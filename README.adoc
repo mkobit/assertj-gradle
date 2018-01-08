@@ -19,7 +19,7 @@ link:{uri-assertj}[AssertJ] assertions for Gradle testing.
 NOTE: This documentation is for the `HEAD` of the repository.
       To see documentation at a specific version see the link:{uri-github-releases}[GitHub Releases page]
 
-== Usage
+== Setup
 
 .Add as a dependency
 [source, kotlin]
@@ -32,6 +32,8 @@ dependencies {
   testImplementation("com.mkobit.gradle.test:assertj-gradle:x.x.x")
 }
 ----
+
+== Usage
 
 === Assertions
 
