@@ -1,11 +1,10 @@
 package buildsrc
 
 object DependencyInfo {
-  val junitGradlePluginVersion: String = "1.0.1"
-  val junitPlatformVersion: String = "1.0.1" 
-  val junitPlatformGradlePluginVersion: String = "1.0.1" 
-  val junitJupiterVersion: String = "5.0.1" 
-  val junitVintageVersion: String = "4.12.1" 
+  val junitGradlePluginVersion: String = "1.0.2"
+  val junitPlatformVersion: String = "1.0.2" 
+  val junitPlatformGradlePluginVersion: String = "1.0.2" 
+  val junitJupiterVersion: String = "5.0.2" 
   val junit5Log4jVersion: String = "2.10.0"
 
   val junitPlatformGradlePlugin = mapOf("group" to "org.junit.platform", "name" to "junit-platform-gradle-plugin", "version" to junitGradlePluginVersion)

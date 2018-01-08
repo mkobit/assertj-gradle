@@ -9,23 +9,13 @@ import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-buildscript {
-  repositories {
-    mavenCentral()
-    jcenter()
-  }
-  dependencies {
-    // TODO: load from properties or script plugin
-    classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.1")
-  }
-}
-
 plugins {
-  id("com.gradle.build-scan") version "1.10.3"
+  id("com.gradle.build-scan") version "1.11"
   `java-library`
   `maven-publish`
   kotlin("jvm")
   id("com.github.ben-manes.versions") version "0.17.0"
+  id("org.junit.platform.gradle.plugin")
   id("com.jfrog.bintray") version "1.8.0"
 }
 
@@ -64,7 +54,11 @@ buildScan {
     env("CIRCLE_BUILD_NUM")?.let { value("Circle CI Build Number", it) }
     env("CIRCLE_BUILD_URL")?.let { link("Build URL", it) }
     env("CIRCLE_SHA1")?.let { value("Revision", it) }
-    env("CIRCLE_COMPARE_URL")?.let { link("Diff", it) }
+//    Issue with Circle CI/Gradle with caret (^) in URLs
+//    see: https://discuss.gradle.org/t/build-scan-plugin-1-10-3-issue-when-using-a-url-with-a-caret/24965
+//    see: https://discuss.circleci.com/t/circle-compare-url-does-not-url-escape-caret/18464
+//    env("CIRCLE_COMPARE_URL")?.let { link("Diff", it) }
+    env("CIRCLE_REPOSITORY_URL")?.let { value("Repository", it) }
     env("CIRCLE_PR_NUMBER")?.let { value("Pull Request Number", it) }
     link("Repository", ProjectInfo.projectUrl)
   }
@@ -78,13 +72,12 @@ repositories {
 dependencies {
   api(gradleApi())
   api(gradleTestKit())
-  api("org.assertj", "assertj-core", "3.8.0")
+  api("org.assertj", "assertj-core", "3.9.0")
   // Should this be an API dependency?
-  compileOnly("org.checkerframework", "checker-qual", "2.2.2")
+  compileOnly("org.checkerframework", "checker-qual", "2.3.1")
   testImplementation(kotlin("stdlib-jre8"))
   testImplementation(kotlin("reflect"))
-  testImplementation("org.assertj:assertj-core:3.8.0")
-  testImplementation("org.mockito:mockito-core:2.12.0")
+  testImplementation("org.mockito:mockito-core:2.13.0")
   testImplementation("com.nhaarman:mockito-kotlin:1.5.0")
   DependencyInfo.junitTestImplementationArtifacts.forEach {
     testImplementation(it)
@@ -116,7 +109,7 @@ main.kotlin.setSrcDirs(emptyList<Any>())
 
 tasks {
   "wrapper"(Wrapper::class) {
-    gradleVersion = "4.3"
+    gradleVersion = "4.4.1"
     distributionType = Wrapper.DistributionType.ALL
   }
 
