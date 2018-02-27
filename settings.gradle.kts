@@ -15,7 +15,7 @@ include("atrium-gradle")
 include("assertj-gradle")
 include("assertk-gradle")
 
-rootProject.name = "assert-gradle"
+rootProject.name = "gradle-assertions"
 rootProject.children.forEach { child ->
   child.buildFileName = "${child.name}.gradle.kts"
 }
