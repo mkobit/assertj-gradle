@@ -1,6 +1,6 @@
 = AssertJ Gradle
 :toc:
-:github-repo-id: assertj-gradle
+:github-repo-id: gradle-assertions
 :uri-github-releases: https://github.com/mkobit/{github-repo-id}/releases
 :uri-gradle-BuildResult: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildResult.html
 :uri-gradle-BuildTask: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildTask.html
@@ -18,6 +18,8 @@ link:{uri-assertj}[AssertJ] assertions for Gradle testing.
 
 NOTE: This documentation is for the `HEAD` of the repository.
       To see documentation at a specific version see the link:{uri-github-releases}[GitHub Releases page]
+
+WARNING: This repository is undergoing restructuring for the next version (`0.3.0`)
 
 == Setup
 

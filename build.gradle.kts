@@ -4,41 +4,18 @@ import com.jfrog.bintray.gradle.BintrayExtension
 import java.io.ByteArrayOutputStream
 import org.gradle.api.internal.HasConvention
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.junit.platform.console.options.Details
-import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
   id("com.gradle.build-scan") version "1.11"
-  `java-library`
-  `maven-publish`
-  kotlin("jvm")
   id("com.github.ben-manes.versions") version "0.17.0"
-  id("org.junit.platform.gradle.plugin")
-  id("com.jfrog.bintray") version "1.8.0"
+  id("org.jetbrains.dokka") version "0.9.16" apply false
+  kotlin("jvm") version "1.2.21" apply false
+  id("com.jfrog.bintray") version "1.8.0" apply false
 }
 
-apply {
-  plugin("org.junit.platform.gradle.plugin")
-}
-
-version = "0.2.0"
-group = "com.mkobit.gradle.test"
-description = "AssertJ extensions for Gradle"
-
-val gitCommitSha: String by lazy {
-  ByteArrayOutputStream().use {
-    project.exec {
-      commandLine("git", "rev-parse", "HEAD")
-      standardOutput = it
-    }
-    it.toString(Charsets.UTF_8.name()).trim()
-  }
-}
-
-val SourceSet.kotlin: SourceDirectorySet
-  get() = withConvention(KotlinSourceSet::class) { kotlin }
+description = "Assertion library extensions for testing with Gradle"
 
 buildScan {
   fun env(key: String): String? = System.getenv(key)
@@ -64,99 +41,20 @@ buildScan {
   }
 }
 
-repositories {
-  jcenter()
-  mavenCentral()
-}
-
-dependencies {
-  api(gradleApi())
-  api(gradleTestKit())
-  api("org.assertj", "assertj-core", "3.9.0")
-  // Should this be an API dependency?
-  compileOnly("org.checkerframework", "checker-qual", "2.3.1")
-  testImplementation(kotlin("stdlib-jre8"))
-  testImplementation(kotlin("reflect"))
-  testImplementation("org.mockito:mockito-core:2.13.0")
-  testImplementation("com.nhaarman:mockito-kotlin:1.5.0")
-  DependencyInfo.junitTestImplementationArtifacts.forEach {
-    testImplementation(it)
-  }
-  DependencyInfo.junitTestRuntimeOnlyArtifacts.forEach {
-    testRuntimeOnly(it)
-  }
-}
-
-extensions.getByType(JUnitPlatformExtension::class.java).apply {
-  platformVersion = DependencyInfo.junitPlatformVersion
-  filters {
-    engines {
-      include("junit-jupiter")
+val gitCommitSha: String by lazy {
+  ByteArrayOutputStream().use {
+    rootProject.exec {
+      commandLine("git", "rev-parse", "HEAD")
+      standardOutput = it
     }
+    it.toString(Charsets.UTF_8.name()).trim()
   }
-  logManager = "org.apache.logging.log4j.jul.LogManager"
-  details = Details.TREE
 }
-
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-val main = java.sourceSets["main"]!!
-// No Kotlin in main source set
-main.kotlin.setSrcDirs(emptyList<Any>())
 
 tasks {
   "wrapper"(Wrapper::class) {
-    gradleVersion = "4.4.1"
+    gradleVersion = "4.6-rc-2"
     distributionType = Wrapper.DistributionType.ALL
-  }
-
-  withType<Jar> {
-    from(project.projectDir) {
-      include("LICENSE.txt")
-      into("META-INF")
-    }
-    manifest {
-      attributes(mapOf(
-        "Build-Revision" to gitCommitSha,
-        "Automatic-Module-Name" to ProjectInfo.automaticModuleName,
-        "Implementation-Version" to project.version
-        // TODO: include Gradle version?
-      ))
-    }
-  }
-
-  withType<Javadoc> {
-    options {
-      header = project.name
-      encoding = "UTF-8"
-    }
-  }
-
-  withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
-
-  val sourcesJar by creating(Jar::class) {
-    classifier = "sources"
-    from(main.allSource)
-    description = "Assembles a JAR of the source code"
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-  }
-
-  val javadocJar by creating(Jar::class) {
-    val javadoc by tasks.getting(Javadoc::class)
-    dependsOn(javadoc)
-    from(javadoc.destinationDir)
-    classifier = "javadoc"
-    description = "Assembles a JAR of the generated Javadoc"
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-  }
-
-  "assemble" {
-    dependsOn(sourcesJar, javadocJar)
   }
 
   val gitDirtyCheck by creating {
@@ -198,69 +96,88 @@ tasks {
     commandLine("git", "tag", "-a", project.version, "-m", "Gradle created tag for ${project.version}")
     mustRunAfter(docVersionChecks)
   }
-
-  val bintrayUpload by getting {
-    dependsOn(gitDirtyCheck)
-    mustRunAfter(gitTag, docVersionChecks)
-  }
+//
+//  val bintrayUpload by getting {
+//    dependsOn(gitDirtyCheck)
+//    mustRunAfter(gitTag, docVersionChecks)
+//  }
 
   val pushGitTag by creating(Exec::class) {
     description = "Pushes Git tag ${project.version} to origin"
     group = PublishingPlugin.PUBLISH_TASK_GROUP
-    mustRunAfter(bintrayUpload, gitTag, docVersionChecks)
+    mustRunAfter(gitTag, docVersionChecks)
     commandLine("git", "push", "origin", "refs/tags/${project.version}")
   }
-
-  "release" {
-    group = PublishingPlugin.PUBLISH_TASK_GROUP
-    description = "Publishes the library and pushes up a Git tag for the current commit"
-    dependsOn(docVersionChecks, bintrayUpload, pushGitTag, gitTag, gitDirtyCheck, "build")
-  }
+//
+//  "release" {
+//    group = PublishingPlugin.PUBLISH_TASK_GROUP
+//    description = "Publishes the library and pushes up a Git tag for the current commit"
+//    dependsOn(docVersionChecks, bintrayUpload, pushGitTag, gitTag, gitDirtyCheck, "build")
+//  }
 }
 
-val publicationName = "assertjGradle"
-publishing {
-  publications.invoke {
-    val sourcesJar by tasks.getting
-    val javadocJar by tasks.getting
-    publicationName(MavenPublication::class) {
-      from(components["java"])
-      artifact(sourcesJar)
-      artifact(javadocJar)
-      pom.withXml {
-        asNode().apply {
-          appendNode("description", project.description)
-          appendNode("url", ProjectInfo.projectUrl)
-          appendNode("licenses").apply {
-            appendNode("license").apply {
-              appendNode("name", "The MIT License")
-              appendNode("url", "https://opensource.org/licenses/MIT")
-              appendNode("distribution", "repo")
-            }
-          }
-        }
+subprojects {
+  version = "0.2.0"
+  group = "com.mkobit.gradle.test"
+
+  pluginManager.withPlugin("java-library") {
+//    withConvention(JavaPluginConvention::class) {
+//      sourceCompatibility = JavaVersion.VERSION_1_8
+//      targetCompatibility = JavaVersion.VERSION_1_8
+//    }
+
+    dependencies {
+      "api"(gradleApi())
+      "api"(gradleTestKit())
+
+      "testImplementation"(kotlin("stdlib-jre8"))
+      "testImplementation"(kotlin("reflect"))
+      "testImplementation"(DependencyInfo.mockitoCore)
+      "testImplementation"(DependencyInfo.mockitoKotlin)
+      DependencyInfo.junitTestImplementationArtifacts.forEach {
+        "testImplementation"(it)
       }
+      DependencyInfo.junitTestRuntimeOnlyArtifacts.forEach {
+        "testRuntimeOnly"(it)
+      }
+    }
+  }
+
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+
+  tasks {
+    withType<Jar> {
+      from(rootProject.projectDir) {
+        include("LICENSE.txt")
+        into("META-INF")
+      }
+      manifest {
+        attributes(mapOf(
+          "Build-Revision" to gitCommitSha,
+          "Implementation-Version" to project.version
+          // TODO: include Gradle version?
+        ))
+      }
+    }
+
+    withType<Test> {
+      useJUnitPlatform()
+      systemProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager")
+    }
+
+    withType<Javadoc> {
+      options {
+        header = project.name
+        encoding = "UTF-8"
+      }
+    }
+
+    withType<KotlinCompile> {
+      kotlinOptions.jvmTarget = "1.8"
     }
   }
 }
 
-bintray {
-  val bintrayUser = project.findProperty("bintrayUser") as String?
-  val bintrayApiKey = project.findProperty("bintrayApiKey") as String?
-  user = bintrayUser
-  key = bintrayApiKey
-  publish = true
-  setPublications(publicationName)
-  pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
-    repo = "gradle"
-    name = project.name
-    userOrg = "mkobit"
-
-    setLabels("gradle", "assertj", "assertion", "testkit")
-    setLicenses("MIT")
-    desc = project.description
-    websiteUrl = ProjectInfo.projectUrl
-    issueTrackerUrl = ProjectInfo.issuesUrl
-    vcsUrl = ProjectInfo.scmUrl
-  })
-}

@@ -6,5 +6,5 @@ object ProjectInfo {
   val scmUrl = "https://github.com/mkobit/assertj-gradle.git"
 
   // TODO: this should probably be a part of some buildSrc plugin that automatically configures the correct things
-  val automaticModuleName = "com.mkobit.gradle.test.assertj"
+//  val automaticModuleName = "com.mkobit.gradle.test.assertj"
 }
