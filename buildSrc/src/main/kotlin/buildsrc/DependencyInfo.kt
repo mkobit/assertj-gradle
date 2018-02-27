@@ -7,6 +7,7 @@ object DependencyInfo {
   val junitJupiterVersion: String = "5.0.2" 
   val junit5Log4jVersion: String = "2.10.0"
 
+
   val junitPlatformGradlePlugin = mapOf("group" to "org.junit.platform", "name" to "junit-platform-gradle-plugin", "version" to junitGradlePluginVersion)
   val junitPlatformRunner = mapOf("group" to "org.junit.platform", "name" to "junit-platform-runner", "version" to junitPlatformVersion)
   val junitJupiterApi = mapOf("group" to "org.junit.jupiter", "name" to "junit-jupiter-api", "version" to junitJupiterVersion)
@@ -18,6 +19,9 @@ object DependencyInfo {
       junitJupiterParams
   )
 
+  val assertJCore = "org.assertj:assertj-core:3.9.1"
+  val mockitoCore = "org.mockito:mockito-core:2.15.0"
+  val mockitoKotlin = "com.nhaarman:mockito-kotlin:1.5.0"
   val junitJupiterEngine = mapOf("group" to "org.junit.jupiter", "name" to "junit-jupiter-engine", "version" to junitJupiterVersion)
   val log4jCore = mapOf("group" to "org.apache.logging.log4j", "name" to "log4j-core", "version" to junit5Log4jVersion)
   val log4jJul = mapOf("group" to "org.apache.logging.log4j", "name" to "log4j-jul", "version" to junit5Log4jVersion)
