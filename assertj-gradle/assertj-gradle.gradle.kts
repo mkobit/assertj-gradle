@@ -24,10 +24,10 @@ java {
 dependencies {
   api(DependencyInfo.assertJCore)
   // Should this be an API dependency?
-  compileOnly("org.checkerframework", "checker-qual", "2.3.1")
+  compileOnly("org.checkerframework", "checker-qual", "2.3.2")
 }
 
-val main = java.sourceSets["main"]!!
+val main by java.sourceSets
 // No Kotlin in main source set
 main.kotlin.setSrcDirs(emptyList<Any>())
 
