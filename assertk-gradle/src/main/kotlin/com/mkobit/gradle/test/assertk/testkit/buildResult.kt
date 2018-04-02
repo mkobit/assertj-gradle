@@ -1,7 +1,6 @@
-package com.mkobit.gradle.test.assertk
+package com.mkobit.gradle.test.assertk.testkit
 
 import assertk.Assert
-import assertk.all
 import assertk.assertions.prop
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
