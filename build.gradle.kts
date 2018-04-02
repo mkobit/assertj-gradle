@@ -53,7 +53,7 @@ val gitCommitSha: String by lazy {
 
 tasks {
   "wrapper"(Wrapper::class) {
-    gradleVersion = "4.6-rc-2"
+    gradleVersion = "4.6"
     distributionType = Wrapper.DistributionType.ALL
   }
 
