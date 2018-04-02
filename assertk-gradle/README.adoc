@@ -1,0 +1,5 @@
+= Assertk
+:toc:
+:uri-assertk: https://github.com/willowtreeapps/assertk
+
+link:{uri-assertk}[Assertk] assertions for Gradle testing.

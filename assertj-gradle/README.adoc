@@ -1,0 +1,81 @@
+= AssertJ
+:toc:
+:uri-assertj: https://joel-costigliola.github.io/assertj/
+:uri-gradle-BuildResult: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildResult.html
+:uri-gradle-BuildTask: https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/BuildTask.html
+
+link:{uri-assertj}[AssertJ] assertions for Gradle testing.
+
+== Setup
+
+.Add as a dependency
+[source, kotlin]
+----
+repositories {
+  jcenter()
+}
+
+dependencies {
+  testImplementation("com.mkobit.gradle.test:assertj-gradle:x.x.x")
+}
+----
+
+== Usage
+
+=== Assertions
+
+The main entrypoints for the assertions are `com.mkobit.gradle.test.assertj.GradleAssertions` and `com.mkobit.gradle.test.assertj.GradleSoftAssertions`.
+
+.Asserting on a link:{uri-gradle-BuildResult}[`BuildResult`]
+[source, java]
+----
+import static com.mkobit.gradle.test.assertj.GradleAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.BuildTask;
+import org.gradle.testkit.runner.TaskOutcome;
+
+import java.util.List;
+
+class BuildResultAssertAssertionsExample {
+  void myTest() {
+    BuildResult buildResult = ...;
+
+    assertThat(buildResult)
+      .outputContains("build output message")
+        .outputDoesNotContain("FAILED")
+        .hasTaskAtPath(":build")
+        .hasTaskAtPathSatisfying(":compile", (BuildTask buildTask) -> assertThat(buildTask).hasTaskOutcome(
+            TaskOutcome.SUCCESS))
+        .hasTaskSuccessAtPath(":compile")
+        .tasksWithOutcomeSatisfy(TaskOutcome.FAILED, (List<BuildTask> tasks) -> assertThat(tasks).isEmpty());
+  }
+
+----
+
+.Asserting on a link:{uri-gradle-BuildTask}[`BuildTask`]
+[source, java]
+----
+import static com.mkobit.gradle.test.assertj.GradleAssertions.assertThat;
+
+import org.gradle.testkit.runner.TaskOutcome;
+import org.gradle.testkit.runner.BuildTask;
+
+class BuildTaskAsseritonsExample {
+  @Test
+  void myTest() {
+    BuildTask buildTask = ...;
+
+    assertThat(buildTask)
+      .pathStartsWith(":myTaskPath")
+      .pathStartsWith(":myT")
+      .pathEndsWith("Path")
+      .pathContains("ask")
+      .isSuccess()
+      .hasTaskOutcome(TaskOutcome.SUCCESS);
+  }
+}
+----
+
+The above examples can also be done with the `GradleSoftAssertions` class.
