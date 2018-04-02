@@ -40,6 +40,11 @@ shared-steps:
         java -XshowSettings:vm -XX:+PrintCommandLineFlags -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -version
         javac -version
       name: Show Java Version
+  store-gradle-test-results: &store-gradle-test-results
+    store_test_results:
+      paths:
+        - ~/build-working-directory/assertj-gradle/build/test-results/
+        - ~/build-working-directory/assertk-gradle/build/test-results/
   run-gradle-build: &run-gradle-build
     run:
       command: ./gradlew build --scan --stacktrace
@@ -54,6 +59,7 @@ jobs:
       - *generate-cache-key
       - *restore-home-cache
       - *run-gradle-build
+      - *store-gradle-test-results
       - *save-home-cache
   test-java-9:
     <<: *java-9-defaults
@@ -63,6 +69,7 @@ jobs:
       - *generate-cache-key
       - *restore-home-cache
       - *run-gradle-build
+      - *store-gradle-test-results
 
 workflows:
   version: 2
