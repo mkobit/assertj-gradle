@@ -8,7 +8,6 @@ plugins {
   `java-library`
   `maven-publish`
   kotlin("jvm")
-  id("org.jetbrains.dokka")
   id("com.jfrog.bintray")
 }
 description = "AssertJ extensions for Gradle"
@@ -24,7 +23,7 @@ java {
 dependencies {
   api(DependencyInfo.assertJCore)
   // Should this be an API dependency?
-  compileOnly("org.checkerframework", "checker-qual", "2.3.2")
+  compileOnly(DependencyInfo.checkerQual)
 }
 
 val main by java.sourceSets

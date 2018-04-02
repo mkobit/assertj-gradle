@@ -8,10 +8,10 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
-  id("com.gradle.build-scan") version "1.11"
+  id("com.gradle.build-scan") version "1.13"
   id("com.github.ben-manes.versions") version "0.17.0"
   id("org.jetbrains.dokka") version "0.9.16" apply false
-  kotlin("jvm") version "1.2.21" apply false
+  kotlin("jvm") version "1.2.31" apply false
   id("com.jfrog.bintray") version "1.8.0" apply false
 }
 
@@ -20,8 +20,8 @@ description = "Assertion library extensions for testing with Gradle"
 buildScan {
   fun env(key: String): String? = System.getenv(key)
 
-  setLicenseAgree("yes")
-  setLicenseAgreementUrl("https://gradle.com/terms-of-service")
+  setTermsOfServiceAgree("yes")
+  setTermsOfServiceUrl("https://gradle.com/terms-of-service")
 
   // Env variables from https://circleci.com/docs/2.0/env-vars/
   if (env("CI") != null) {
@@ -116,10 +116,12 @@ tasks {
 //  }
 }
 
-subprojects {
-  version = "0.2.0"
+allprojects {
   group = "com.mkobit.gradle.test"
+  version = "0.2.0"
+}
 
+subprojects {
   pluginManager.withPlugin("java-library") {
 //    withConvention(JavaPluginConvention::class) {
 //      sourceCompatibility = JavaVersion.VERSION_1_8

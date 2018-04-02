@@ -1,13 +1,24 @@
 import buildsrc.DependencyInfo
+import buildsrc.ProjectInfo
+import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.jvm.tasks.Jar
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import java.net.URL
 
 plugins {
   `java-library`
+  `maven-publish`
   kotlin("jvm")
   id("com.jfrog.bintray")
+  id("org.jetbrains.dokka")
 }
 
 description = "AssertK (https://github.com/willowtreeapps/assertk) extensions for Gradle"
+
+val SourceSet.kotlin: SourceDirectorySet
+  get() = withConvention(KotlinSourceSet::class) { kotlin }
 
 java {
   sourceCompatibility = JavaVersion.VERSION_1_8
@@ -23,8 +34,31 @@ tasks {
     }
   }
 
+  val main by java.sourceSets
+  // No Java code, so don't need the javadoc task.
+  // Dokka generates our documentation.
+  remove(getByName("javadoc"))
+  val dokka by getting(DokkaTask::class) {
+    dependsOn(main.classesTaskName)
+    jdkVersion = 8
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+    sourceDirs = main.kotlin.srcDirs
+    // See https://github.com/Kotlin/dokka/issues/196
+    externalDocumentationLink(delegateClosureOf<DokkaConfiguration.ExternalDocumentationLink.Builder> {
+      url = URL("https://docs.gradle.org/current/javadoc/")
+    })
+  }
+
+  val javadocJar by creating(Jar::class) {
+    dependsOn(dokka)
+    description = "Assembles a JAR of the generated Javadoc"
+    from(dokka.outputDirectory)
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    classifier = "javadoc"
+  }
+
   val sourcesJar by creating(Jar::class) {
-    val main by java.sourceSets
     classifier = "sources"
     from(main.allSource)
     description = "Assembles a JAR of the source code"
@@ -32,10 +66,57 @@ tasks {
   }
 
   "assemble" {
-    dependsOn(sourcesJar)
+    dependsOn(javadocJar, sourcesJar)
   }
 }
 
 dependencies {
   api(DependencyInfo.assertk)
+}
+
+val publicationName = "assertkGradle"
+publishing {
+  publications.invoke {
+    val sourcesJar by tasks.getting
+    val javadocJar by tasks.getting
+    publicationName(MavenPublication::class) {
+      from(components["java"])
+      artifact(sourcesJar)
+      artifact(javadocJar)
+      pom.withXml {
+        asNode().apply {
+          appendNode("description", project.description)
+          appendNode("url", ProjectInfo.projectUrl)
+          appendNode("licenses").apply {
+            appendNode("license").apply {
+              appendNode("name", "The MIT License")
+              appendNode("url", "https://opensource.org/licenses/MIT")
+              appendNode("distribution", "repo")
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+bintray {
+  val bintrayUser = project.findProperty("bintrayUser") as String?
+  val bintrayApiKey = project.findProperty("bintrayApiKey") as String?
+  user = bintrayUser
+  key = bintrayApiKey
+  publish = true
+  setPublications(publicationName)
+  pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
+    repo = "gradle"
+    name = project.name
+    userOrg = "mkobit"
+
+    setLabels("gradle", "assertk", "assertion", "testkit")
+    setLicenses("MIT")
+    desc = project.description
+    websiteUrl = ProjectInfo.projectUrl
+    issueTrackerUrl = ProjectInfo.issuesUrl
+    vcsUrl = ProjectInfo.scmUrl
+  })
 }
