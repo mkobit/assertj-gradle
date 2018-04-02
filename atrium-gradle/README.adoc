@@ -1,0 +1,7 @@
+= Assertk
+:toc:
+:uri-atrium: https://github.com/robstoll/atrium
+
+link:{uri-atrium}[Atrium] assertions for Gradle testing.
+
+WARNING: This subproject is not currently being worked on.

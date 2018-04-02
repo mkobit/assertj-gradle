@@ -1,3 +1,4 @@
+import buildsrc.DependencyInfo
 import org.gradle.jvm.tasks.Jar
 
 plugins {
@@ -36,5 +37,5 @@ tasks {
 }
 
 dependencies {
-  api("com.willowtreeapps.assertk", "assertk", "0.9")
+  api(DependencyInfo.assertk)
 }

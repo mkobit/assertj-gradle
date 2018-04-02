@@ -1,5 +1,6 @@
 package buildsrc
 
+@Suppress("UNUSED", "MemberVisibilityCanBePrivate")
 object ProjectInfo {
   const val projectUrl = "https://github.com/mkobit/gradle-assertions"
   const val issuesUrl = "$projectUrl/issues"
