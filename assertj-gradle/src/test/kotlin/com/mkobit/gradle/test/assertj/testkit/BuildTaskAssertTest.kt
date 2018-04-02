@@ -16,7 +16,7 @@ import java.util.regex.Pattern
 
 internal class BuildTaskAssertTest {
   companion object {
-    private val TEST_PATH = ":taskName"
+    private const val TEST_PATH = ":taskName"
   }
 
   private lateinit var buildTaskAssert: BuildTaskAssert
