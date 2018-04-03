@@ -134,6 +134,8 @@ subprojects {
 
       "testImplementation"(kotlin("stdlib-jre8"))
       "testImplementation"(kotlin("reflect"))
+      "testImplementation"(DependencyInfo.assertJCore)
+      "testImplementation"(DependencyInfo.assertk)
       "testImplementation"(DependencyInfo.mockitoCore)
       "testImplementation"(DependencyInfo.mockitoKotlin)
       DependencyInfo.junitTestImplementationArtifacts.forEach {
