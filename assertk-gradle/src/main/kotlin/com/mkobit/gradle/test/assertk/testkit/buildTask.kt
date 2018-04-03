@@ -13,7 +13,7 @@ import org.gradle.testkit.runner.TaskOutcome
  */
 fun <T : BuildTask> Assert<T>.hasOutcome(outcome: TaskOutcome) {
   if (actual.outcome != outcome) {
-    expected("task at path ${actual.path}: ${show(outcome)} but was ${show(actual.outcome)}")
+    expected("task at path ${show(actual.path)} to have outcome ${show(outcome)} but was ${show(actual.outcome)}")
   }
 }
 
