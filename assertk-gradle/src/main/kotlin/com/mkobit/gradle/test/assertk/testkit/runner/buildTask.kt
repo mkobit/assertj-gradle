@@ -1,4 +1,4 @@
-package com.mkobit.gradle.test.assertk.testkit
+package com.mkobit.gradle.test.assertk.testkit.runner
 
 import assertk.Assert
 import assertk.assertions.prop

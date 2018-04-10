@@ -1,4 +1,4 @@
-package com.mkobit.gradle.test.assertk.artifacts
+package com.mkobit.gradle.test.assertk.api.artifacts
 
 import assertk.Assert
 import assertk.assertions.prop

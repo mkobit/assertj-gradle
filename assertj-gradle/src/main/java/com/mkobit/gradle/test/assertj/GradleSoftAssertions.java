@@ -1,6 +1,6 @@
 package com.mkobit.gradle.test.assertj;
 
-import com.mkobit.gradle.test.assertj.artifacts.ConfigurationAssert;
+import com.mkobit.gradle.test.assertj.api.artifacts.ConfigurationAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert;
 import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert;
 import org.assertj.core.api.SoftAssertions;

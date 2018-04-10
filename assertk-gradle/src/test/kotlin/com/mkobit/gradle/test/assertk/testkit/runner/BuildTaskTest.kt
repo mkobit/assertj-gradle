@@ -1,16 +1,11 @@
-package com.mkobit.gradle.test.assertk.testkit
+package com.mkobit.gradle.test.assertk.testkit.runner
 
 import assertk.Assert
-import assertk.AssertBlock
 import assertk.assert
-import assertk.assertions.isEqualTo
-import assertk.assertions.isInstanceOf
 import assertk.assertions.isSameAs
-import assertk.assertions.message
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.gradle.testkit.runner.BuildTask
