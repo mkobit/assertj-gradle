@@ -26,8 +26,9 @@ For each release, a subsection should be added for each of the following if they
 
 === Changed
 
-* Switch from `compileOnly("com.google.code.findbugs:jsr305:3.0.2")` to `compileOnly("org.checkerframework", "checker-qual", "2.2.1")` for annotations
+* Switch from `compileOnly("com.google.code.findbugs:jsr305:3.0.2")` to `compileOnly("org.checkerframework:checker-qual:version")` for annotations
 * `BuildTaskAssert.pathIsEqualTo` now takes a `CharSequence` instead of a `String` as input
+* Dependency updates
 
 == 0.2.0 (2017/10/13)
 

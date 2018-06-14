@@ -8,11 +8,11 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
-  id("com.gradle.build-scan") version "1.13"
-  id("com.github.ben-manes.versions") version "0.17.0"
-  id("org.jetbrains.dokka") version "0.9.16" apply false
-  kotlin("jvm") version "1.2.31" apply false
-  id("com.jfrog.bintray") version "1.8.0" apply false
+  id("com.gradle.build-scan") version "1.14"
+  id("com.github.ben-manes.versions") version "0.18.0"
+  id("org.jetbrains.dokka") version "0.9.17" apply false
+  kotlin("jvm") version "1.2.50" apply false
+  id("com.jfrog.bintray") version "1.8.1" apply false
 }
 
 description = "Assertion library extensions for testing with Gradle"
@@ -53,7 +53,7 @@ val gitCommitSha: String by lazy {
 
 tasks {
   "wrapper"(Wrapper::class) {
-    gradleVersion = "4.6"
+    gradleVersion = "4.8"
     distributionType = Wrapper.DistributionType.ALL
   }
 
