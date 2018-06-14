@@ -10,8 +10,6 @@ object DependencyInfo {
   const val mockitoCore = "org.mockito:mockito-core:2.18.3"
   const val mockitoKotlin = "com.nhaarman:mockito-kotlin:1.5.0"
   const val assertk = "com.willowtreeapps.assertk:assertk:0.10"
-  const val atriumVersion = "0.6.0"
-  const val atriumUk = "ch.tutteli:atrium-cc-en_UK-robstoll:$atriumVersion"
   const val checkerQual = "org.checkerframework:checker-qual:2.5.2"
 
   val junitPlatformRunner = junitPlatform("runner")

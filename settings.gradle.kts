@@ -10,8 +10,6 @@ pluginManagement {
   }
 }
 
-// TODO: move assertj-gradle to subproject
-include("atrium-gradle")
 include("assertj-gradle")
 include("assertk-gradle")
 
