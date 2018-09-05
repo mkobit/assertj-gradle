@@ -15,9 +15,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
-private const val TASK_PATH = ":tasky"
-
 internal class BuildTaskTest {
+
+  companion object {
+    private const val TASK_PATH = ":tasky"
+  }
+
   private lateinit var mockBuildTask: BuildTask
 
   @BeforeEach
@@ -103,7 +106,7 @@ internal class BuildTaskTest {
   }
 
   @Test
-  fun `hasPath assertion`() {
+  internal fun `hasPath assertion`() {
     val taskPath = ":pizza"
     whenever(mockBuildTask.path).thenReturn(":pizza", ":party")
     assertThatCode {
