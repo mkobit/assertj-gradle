@@ -26,7 +26,7 @@ dependencies {
   compileOnly(DependencyInfo.checkerQual)
 }
 
-val main by java.sourceSets
+val main by sourceSets
 // No Kotlin in main source set
 main.kotlin.setSrcDirs(emptyList<Any>())
 
@@ -62,10 +62,10 @@ tasks {
 
 val publicationName = "assertjGradle"
 publishing {
-  publications.invoke {
+  publications {
     val sourcesJar by tasks.getting
     val javadocJar by tasks.getting
-    publicationName(MavenPublication::class) {
+    register(publicationName, MavenPublication::class) {
       from(components["java"])
       artifact(sourcesJar)
       artifact(javadocJar)

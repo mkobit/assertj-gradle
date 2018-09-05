@@ -34,7 +34,7 @@ tasks {
     }
   }
 
-  val main by java.sourceSets
+  val main by sourceSets
   // No Java code, so don't need the javadoc task.
   // Dokka generates our documentation.
   remove(getByName("javadoc"))
@@ -76,10 +76,10 @@ dependencies {
 
 val publicationName = "assertkGradle"
 publishing {
-  publications.invoke {
+  publications {
     val sourcesJar by tasks.getting
     val javadocJar by tasks.getting
-    publicationName(MavenPublication::class) {
+    register(publicationName, MavenPublication::class) {
       from(components["java"])
       artifact(sourcesJar)
       artifact(javadocJar)
