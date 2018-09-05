@@ -69,16 +69,14 @@ publishing {
       from(components["java"])
       artifact(sourcesJar)
       artifact(javadocJar)
-      pom.withXml {
-        asNode().apply {
-          appendNode("description", project.description)
-          appendNode("url", ProjectInfo.projectUrl)
-          appendNode("licenses").apply {
-            appendNode("license").apply {
-              appendNode("name", "The MIT License")
-              appendNode("url", "https://opensource.org/licenses/MIT")
-              appendNode("distribution", "repo")
-            }
+      pom {
+        description.set(project.description)
+        url.set(ProjectInfo.projectUrl)
+        licenses {
+          license {
+            name.set("The MIT License")
+            url.set("https://opensource.org/licenses/MIT")
+            distribution.set("repo")
           }
         }
       }
