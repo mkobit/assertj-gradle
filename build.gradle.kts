@@ -11,7 +11,7 @@ plugins {
   id("com.gradle.build-scan") version "1.16"
   id("com.github.ben-manes.versions") version "0.20.0"
   id("org.jetbrains.dokka") version "0.9.17" apply false
-  kotlin("jvm") version "1.2.61" apply false
+  kotlin("jvm") version "1.2.71" apply false
   id("com.jfrog.bintray") version "1.8.4" apply false
 }
 
@@ -53,7 +53,7 @@ val gitCommitSha: String by lazy {
 
 tasks {
   register("wrapper", Wrapper::class) {
-    gradleVersion = "4.10"
+    gradleVersion = "4.10.2"
   }
 
   val gitDirtyCheck by creating {
