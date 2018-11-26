@@ -8,7 +8,7 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
-  id("com.gradle.build-scan") version "1.16"
+  id("com.gradle.build-scan") version "2.0.2"
   id("com.github.ben-manes.versions") version "0.20.0"
   id("org.jetbrains.dokka") version "0.9.17" apply false
   kotlin("jvm") version "1.2.71" apply false
@@ -52,8 +52,8 @@ val gitCommitSha: String by lazy {
 }
 
 tasks {
-  register("wrapper", Wrapper::class) {
-    gradleVersion = "4.10.2"
+  wrapper {
+    gradleVersion = "5.0"
   }
 
   val gitDirtyCheck by creating {
@@ -131,7 +131,7 @@ subprojects {
       "api"(gradleApi())
       "api"(gradleTestKit())
 
-      "testImplementation"(kotlin("stdlib-jre8"))
+      "testImplementation"(kotlin("stdlib-jdk8"))
       "testImplementation"(kotlin("reflect"))
       "testImplementation"(DependencyInfo.assertJCore)
       "testImplementation"(DependencyInfo.assertk)
@@ -166,21 +166,20 @@ subprojects {
       }
     }
 
-    withType<Test> {
+    withType<Test>().configureEach {
       useJUnitPlatform()
       systemProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager")
     }
 
-    withType<Javadoc> {
+    withType<Javadoc>().configureEach {
       options {
         header = project.name
         encoding = "UTF-8"
       }
     }
 
-    withType<KotlinCompile> {
+    withType<KotlinCompile>().configureEach {
       kotlinOptions.jvmTarget = "1.8"
     }
   }
 }
-

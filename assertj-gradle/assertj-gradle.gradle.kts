@@ -28,10 +28,11 @@ dependencies {
 
 val main by sourceSets
 // No Kotlin in main source set
-main.kotlin.setSrcDirs(emptyList<Any>())
+// TODO: mkobit - gradle fails to execute java compilation when this is executed
+//main.kotlin.setSrcDirs(emptyList<Any>())
 
 tasks {
-  withType<Jar> {
+  withType<Jar>().configureEach {
     manifest {
       attributes(mapOf(
           "Automatic-Module-Name" to "com.mkobit.gradle.test.assertj"
@@ -39,23 +40,22 @@ tasks {
     }
   }
 
-  val sourcesJar by creating(Jar::class) {
+  val sourcesJar by registering(Jar::class) {
     classifier = "sources"
     from(main.allSource)
     description = "Assembles a JAR of the source code"
     group = JavaBasePlugin.DOCUMENTATION_GROUP
   }
 
-  val javadocJar by creating(Jar::class) {
-    val javadoc by tasks.getting(Javadoc::class)
+  val javadocJar by registering(Jar::class) {
     dependsOn(javadoc)
-    from(javadoc.destinationDir)
+    from(javadoc.get().destinationDir)
     classifier = "javadoc"
     description = "Assembles a JAR of the generated Javadoc"
     group = JavaBasePlugin.DOCUMENTATION_GROUP
   }
 
-  "assemble" {
+  assemble {
     dependsOn(sourcesJar, javadocJar)
   }
 }
