@@ -5,11 +5,10 @@ import org.assertj.core.api.Assertions
 import org.gradle.api.artifacts.Configuration
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-@Disabled("Fails on AssertJ 3.9.1")
 internal class GradleSoftAssertionsTest {
+
   @Test
   internal fun `can use soft assertions with BuildTask`() {
     val mockBuildTask: BuildTask = mock()
