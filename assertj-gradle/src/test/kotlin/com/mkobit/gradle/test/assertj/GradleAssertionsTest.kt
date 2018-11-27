@@ -1,7 +1,7 @@
 package com.mkobit.gradle.test.assertj
 
 import com.mkobit.gradle.test.assertj.GradleAssertions.assertThat
-import com.mkobit.gradle.test.assertj.api.artifacts.ConfigurationAssert
+import com.mkobit.gradle.test.assertj.gradleapi.artifacts.ConfigurationAssert
 import com.mkobit.gradle.test.assertj.testkit.BuildResultAssert
 import com.mkobit.gradle.test.assertj.testkit.BuildTaskAssert
 import com.nhaarman.mockito_kotlin.mock

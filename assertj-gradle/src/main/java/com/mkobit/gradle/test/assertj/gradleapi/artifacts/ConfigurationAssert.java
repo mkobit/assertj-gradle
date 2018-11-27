@@ -1,4 +1,4 @@
-package com.mkobit.gradle.test.assertj.api.artifacts;
+package com.mkobit.gradle.test.assertj.gradleapi.artifacts;
 
 import org.assertj.core.api.AbstractAssert;
 import org.checkerframework.checker.nullness.qual.Nullable;
