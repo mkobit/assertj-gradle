@@ -1,79 +1,77 @@
-version: 2
-java-8-defaults: &java-8-defaults
-  working_directory: ~/build-working-directory
-  docker:
-    - image: circleci/openjdk:8-jdk
-      environment:
-        JAVA_OPTS: -XX:+UseG1GC
-        # Disable Kotlin compiler daemon - https://discuss.kotlinlang.org/t/solved-disable-kotlin-compiler-process-keepalive/2622
-        GRADLE_OPTS: -Dkotlin.compiler.execution.strategy="in-process"
-java-9-defaults: &java-9-defaults
-  working_directory: ~/build-working-directory
-  docker:
-    - image: circleci/openjdk:9-jdk
-      environment:
-        # Disable Kotlin compiler daemon - https://discuss.kotlinlang.org/t/solved-disable-kotlin-compiler-process-keepalive/2622
-        GRADLE_OPTS: -Dkotlin.compiler.execution.strategy="in-process"
+version: 2.1
 
-shared-steps:
-  generate-cache-key: &generate-cache-key
-    run:
-      command: |
-        mkdir -p build
-        find settings.gradle.kts build.gradle.kts gradle buildSrc/src buildSrc/build.gradle.kts -type f -exec sha256sum '{}' \; | tee build/circle-ci-key.txt
-      name: Generate cache key
-  restore-home-cache: &restore-home-cache
-    restore_cache:
-      keys:
-        - v2-home-cache-{{ checksum "build/circle-ci-key.txt" }}
-        - v2-home-cache-
-  save-home-cache: &save-home-cache
-    save_cache:
-      paths:
-        - ~/.gradle
-      key: v2-home-cache-{{ checksum "build/circle-ci-key.txt" }}
-      when: always
-  show-java-info: &show-java-info
-    run:
-      command: |
-        java -XshowSettings:vm -XX:+PrintCommandLineFlags -version
-        java -XshowSettings:vm -XX:+PrintCommandLineFlags -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -version
-        javac -version
-      name: Show Java Version
-  store-gradle-test-results: &store-gradle-test-results
-    store_test_results:
-      paths:
-        - ~/build-working-directory/assertj-gradle/build/test-results/
-        - ~/build-working-directory/assertk-gradle/build/test-results/
-  run-gradle-build: &run-gradle-build
-    run:
-      command: ./gradlew build --scan --stacktrace
-      name: Run Gradle Build
+executors:
+  java-8:
+    working_directory: ~/build-working-directory
+    docker:
+      - image: circleci/openjdk:8-jdk
+        environment:
+          JAVA_OPTS: -XX:+UseG1GC
+          # Disable Kotlin compiler daemon - https://discuss.kotlinlang.org/t/solved-disable-kotlin-compiler-process-keepalive/2622
+          GRADLE_OPTS: -Dkotlin.compiler.execution.strategy="in-process"
+  java-11:
+    working_directory: ~/build-working-directory
+    docker:
+      - image: circleci/openjdk:11-jdk
+        environment:
+          # Disable Kotlin compiler daemon - https://discuss.kotlinlang.org/t/solved-disable-kotlin-compiler-process-keepalive/2622
+          GRADLE_OPTS: -Dkotlin.compiler.execution.strategy="in-process"
+
+commands:
+  gradle-build:
+    description: Runs './gradlew build' testing against the provided version
+    steps:
+      - run:
+          name: Run Gradle Build
+          command: ./gradlew build --scan
+      - store_test_results:
+          path: ~/build-working-directory/build/test-results/
+  restore-home-cache:
+    description: Restores the Gradle home cache.
+    steps:
+      - run:
+          name: Generate cache key
+          command: |
+            mkdir -p build
+            find settings.gradle.kts build.gradle.kts gradle buildSrc/src buildSrc/build.gradle.kts -type f -exec sha256sum '{}' \; | tee build/circle-ci-key.txt
+      - restore_cache:
+          keys:
+            - v2-home-cache-{{ checksum "build/circle-ci-key.txt" }}
+            - v2-home-cache-
+  save-home-cache:
+    description: Saves the Gradle home cache
+    steps:
+      - run:
+          name: Generate cache key
+          command: |
+            mkdir -p build
+            find settings.gradle.kts build.gradle.kts gradle buildSrc/src buildSrc/build.gradle.kts -type f -exec sha256sum '{}' \; | tee build/circle-ci-key.txt
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v2-home-cache-{{ checksum "build/circle-ci-key.txt" }}
+          when: always
 
 jobs:
   test-java-8:
-    <<: *java-8-defaults
+    executor: java-8
     steps:
       - checkout
-      - *show-java-info
-      - *generate-cache-key
-      - *restore-home-cache
-      - *run-gradle-build
-      - *store-gradle-test-results
-      - *save-home-cache
-  test-java-9:
-    <<: *java-9-defaults
+      - restore-home-cache
+      - gradle-build
+      - save-home-cache
+  test-java-11:
+    executor: java-11
     steps:
       - checkout
-      - *show-java-info
-      - *generate-cache-key
-      - *restore-home-cache
-      - *run-gradle-build
-      - *store-gradle-test-results
+      - restore-home-cache
+      - gradle-build
 
 workflows:
   version: 2
   build:
     jobs:
       - test-java-8
-      - test-java-9
+      - test-java-11:
+          requires:
+            - test-java-8
