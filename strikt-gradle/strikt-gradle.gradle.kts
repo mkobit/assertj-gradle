@@ -2,15 +2,20 @@ import buildsrc.DependencyInfo
 import buildsrc.ProjectInfo
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.jvm.tasks.Jar
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import java.net.URL
 
 plugins {
   `java-library`
   `maven-publish`
   kotlin("jvm")
   id("com.jfrog.bintray")
+  id("org.jetbrains.dokka")
 }
-description = "AssertJ extensions for Gradle"
+
+description = "Strikt (https://github.com/robfletcher/strikt) extensions for Gradle"
 
 val SourceSet.kotlin: SourceDirectorySet
   get() = withConvention(KotlinSourceSet::class) { kotlin }
@@ -20,47 +25,56 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-dependencies {
-  api(DependencyInfo.assertJCore)
-  // Should this be an API dependency?
-  compileOnly(DependencyInfo.checkerQual)
-}
-
-val main by sourceSets
-// No Kotlin in main source set
-// TODO: mkobit - gradle fails to execute java compilation when this is executed
-//main.kotlin.setSrcDirs(emptyList<Any>())
-
 tasks {
-  withType<Jar>().configureEach {
+  withType<Jar> {
     manifest {
       attributes(mapOf(
-          "Automatic-Module-Name" to "com.mkobit.gradle.test.assertj"
+        "Automatic-Module-Name" to "com.mkobit.gradle.test.strikt"
       ))
     }
   }
 
-  val sourcesJar by registering(Jar::class) {
+  val main by sourceSets
+  // No Java code, so don't need the javadoc task.
+  // Dokka generates our documentation.
+  remove(getByName("javadoc"))
+  val dokka by getting(DokkaTask::class) {
+    dependsOn(main.classesTaskName)
+    jdkVersion = 8
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+    sourceDirs = main.kotlin.srcDirs
+    // See https://github.com/Kotlin/dokka/issues/196
+    externalDocumentationLink(delegateClosureOf<DokkaConfiguration.ExternalDocumentationLink.Builder> {
+      url = URL("https://docs.gradle.org/current/javadoc/")
+    })
+  }
+
+  val javadocJar by creating(Jar::class) {
+    dependsOn(dokka)
+    description = "Assembles a JAR of the generated Javadoc"
+    from(dokka.outputDirectory)
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    classifier = "javadoc"
+  }
+
+  val sourcesJar by creating(Jar::class) {
     classifier = "sources"
     from(main.allSource)
     description = "Assembles a JAR of the source code"
     group = JavaBasePlugin.DOCUMENTATION_GROUP
   }
 
-  val javadocJar by registering(Jar::class) {
-    dependsOn(javadoc)
-    from(javadoc.get().destinationDir)
-    classifier = "javadoc"
-    description = "Assembles a JAR of the generated Javadoc"
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-  }
-
-  assemble {
-    dependsOn(sourcesJar, javadocJar)
+  "assemble" {
+    dependsOn(javadocJar, sourcesJar)
   }
 }
 
-val publicationName = "assertjGradle"
+dependencies {
+  api(DependencyInfo.strikt)
+}
+
+val publicationName = "striktGradle"
 publishing {
   publications {
     val sourcesJar by tasks.getting
@@ -96,7 +110,7 @@ bintray {
     name = project.name
     userOrg = "mkobit"
 
-    setLabels("gradle", "assertj", "assertion", "testkit")
+    setLabels("gradle", "strikt", "assertion", "testkit")
     setLicenses("MIT")
     desc = project.description
     websiteUrl = ProjectInfo.projectUrl
