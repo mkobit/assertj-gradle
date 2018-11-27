@@ -24,6 +24,12 @@ For each release, a subsection should be added for each of the following if they
 
 == UNRELEASED (yyyy/mm/dd)
 
+[NOTE]
+====
+Need to revamp this for multi project publishing.
+Run a `git diff` before creating all of the changeslogs.
+====
+
 === Changed
 
 * Switch from `compileOnly("com.google.code.findbugs:jsr305:3.0.2")` to `compileOnly("org.checkerframework:checker-qual:version")` for annotations
