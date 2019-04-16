@@ -1,7 +1,6 @@
 include(
   "assertj-gradle",
-  "assertk-gradle",
-  "strikt-gradle"
+  "assertk-gradle"
 )
 
 rootProject.name = "gradle-assertions"
